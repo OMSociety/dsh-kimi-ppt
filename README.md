@@ -12,11 +12,10 @@
 [![Stars](https://img.shields.io/github/stars/OMSociety/kimi-ppt-skill?style=flat)](https://github.com/OMSociety/kimi-ppt-skill)
 [![Issues](https://img.shields.io/github/issues/OMSociety/kimi-ppt-skill?style=flat)](https://github.com/OMSociety/kimi-ppt-skill/issues)
 
+**目录**：• [核心特性](#核心特性) • [功能概览](#功能概览) • [快速开始](#快速开始) • [命令](#命令) • [设计系统与字体](#设计系统与字体) • [常见问题](#常见问题) • [更新日志](#更新日志)
 </div>
 
 > **免责声明**：本插件内含的 `kimi-ppt` 技能为**非官方** Kimi Slides 逆向/衍生项目（源自 [MIT 的 `open-kimi-ppt-skill`](https://github.com/binaryify/open-kimi-ppt-skill)），未获 Moonshot AI 认可或支持。仅供学习与研究使用。
-
-**目录**：• [核心特性](#核心特性) • [功能概览](#功能概览) • [快速开始](#快速开始) • [命令](#命令) • [设计系统与字体](#设计系统与字体) • [常见问题](#常见问题) • [更新日志](#更新日志)
 
 ## 核心特性
 
