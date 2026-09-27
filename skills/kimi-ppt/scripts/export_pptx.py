@@ -61,7 +61,7 @@ class QuietHandler(SimpleHTTPRequestHandler):
 
 
 def log(message: str) -> None:
-    print(f"[open-kimi-ppt] {message}", file=sys.stderr, flush=True)
+    print(f"[kimi-ppt] {message}", file=sys.stderr, flush=True)
 
 
 def run_command(
@@ -78,7 +78,7 @@ def run_command(
     system locale (GBK on zh-CN Windows) can also raise UnicodeDecodeError.
     Writing to a UTF-8 file avoids both failures.
     """
-    handle, sink_path = tempfile.mkstemp(prefix="open-kimi-ppt-", suffix=".log")
+    handle, sink_path = tempfile.mkstemp(prefix="kimi-ppt-", suffix=".log")
     os.close(handle)
     sink = Path(sink_path)
     output = ""
@@ -737,7 +737,7 @@ def export_pptx(
         f"defaults: transition={transition}, embed_fonts={'on' if embed_fonts else 'off'}"
     )
 
-    with temporary_directory(prefix="open-kimi-ppt-export-") as temp_name:
+    with temporary_directory(prefix="kimi-ppt-export-") as temp_name:
         temp_dir = Path(temp_name)
         download_dir = temp_dir / "downloads"
         download_dir.mkdir()
@@ -746,7 +746,7 @@ def export_pptx(
             json.dumps(payload, ensure_ascii=False), encoding="utf-8"
         )
         server, thread, url = serve(temp_dir)
-        session = f"open-kimi-ppt-export-{os.getpid()}-{uuid.uuid4().hex[:8]}"
+        session = f"kimi-ppt-export-{os.getpid()}-{uuid.uuid4().hex[:8]}"
         browser = BrowserSession(agent_browser, session, temp_dir, download_dir, cdp_port)
         downloads = default_downloads_dir()
         try:
@@ -870,7 +870,7 @@ def main(argv: Optional[Sequence[str]] = None) -> int:
             args.force,
         )
     except (ExportError, OSError, subprocess.SubprocessError) as exc:
-        print(f"open-kimi-ppt export failed: {exc}", file=sys.stderr)
+        print(f"kimi-ppt export failed: {exc}", file=sys.stderr)
         return 1
     print(json.dumps(summary, ensure_ascii=False, indent=2))
     return 0

@@ -2,14 +2,14 @@
   "name": "dsh-kimi-ppt-skill",
   "version": "1.1.0",
   "type": "module",
-  "description": "DeepSeek Harness plugin that bundles the kimi-ppt skill: create/edit/export PPT with a locally generated .pptx and Pillow preview, no browser needed. Derived from the MIT open-kimi-ppt-skill (reverse-engineered Kimi Slides).",
+  "description": "DeepSeek Harness plugin that bundles the kimi-ppt skill: create, edit and export PPT / slides / presentations as a locally generated .pptx with Pillow-rendered previews, no browser needed.",
   "author": "OMSociety (https://github.com/OMSociety)",
-  "homepage": "https://github.com/OMSociety/kimi-ppt-skill#readme",
-  "bugs": "https://github.com/OMSociety/kimi-ppt-skill/issues",
+  "homepage": "https://github.com/OMSociety/dsh-kimi-ppt#readme",
+  "bugs": "https://github.com/OMSociety/dsh-kimi-ppt/issues",
   "license": "MIT",
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/OMSociety/kimi-ppt-skill.git"
+    "url": "git+https://github.com/OMSociety/dsh-kimi-ppt.git"
   },
   "keywords": [
     "dsh",
@@ -19,6 +19,7 @@
     "ppt",
     "pptx",
     "slides",
+    "presentation",
     "skill"
   ],
   "main": "./plugin/index.mjs",

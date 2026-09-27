@@ -1,21 +1,21 @@
 <div align="center">
 
-<img src="https://raw.githubusercontent.com/OMSociety/kimi-ppt-skill/main/docs/logo.png" width="120" alt="kimi-ppt-skill logo"/>
+<img src="https://raw.githubusercontent.com/OMSociety/dsh-kimi-ppt/main/docs/logo.png" width="120" alt="dsh-kimi-ppt logo"/>
 
-# kimi-ppt-skill
+# dsh-kimi-ppt
 
 **DeepSeek Harness 插件 —— 内含 kimi-ppt 技能：创建 / 编辑 / 复刻 / 导出 PPT，DSH 内纯本地导出**
 
-[![Version](https://img.shields.io/github/v/tag/OMSociety/kimi-ppt-skill?style=flat&color=blue)](https://github.com/OMSociety/kimi-ppt-skill/releases)
+[![Version](https://img.shields.io/github/v/tag/OMSociety/dsh-kimi-ppt?style=flat&color=blue)](https://github.com/OMSociety/dsh-kimi-ppt/releases)
 [![DeepSeek Harness](https://img.shields.io/badge/DeepSeek%20Harness-any-8A2BE2?style=flat&logo=deepseek&logoColor=white)](https://github.com/deepseek-ai/deepseek-harness)
-[![License](https://img.shields.io/github/license/OMSociety/kimi-ppt-skill?style=flat&color=green)](LICENSE)
-[![Stars](https://img.shields.io/github/stars/OMSociety/kimi-ppt-skill?style=flat)](https://github.com/OMSociety/kimi-ppt-skill)
-[![Issues](https://img.shields.io/github/issues/OMSociety/kimi-ppt-skill?style=flat)](https://github.com/OMSociety/kimi-ppt-skill/issues)
+[![License](https://img.shields.io/github/license/OMSociety/dsh-kimi-ppt?style=flat&color=green)](LICENSE)
+[![Stars](https://img.shields.io/github/stars/OMSociety/dsh-kimi-ppt?style=flat)](https://github.com/OMSociety/dsh-kimi-ppt)
+[![Issues](https://img.shields.io/github/issues/OMSociety/dsh-kimi-ppt?style=flat)](https://github.com/OMSociety/dsh-kimi-ppt/issues)
 
 **目录**：• [核心特性](#核心特性) • [功能概览](#功能概览) • [快速开始](#快速开始) • [命令](#命令) • [设计系统与字体](#设计系统与字体) • [常见问题](#常见问题) • [更新日志](#更新日志)
 </div>
 
-> **免责声明**：本插件内含的 `kimi-ppt` 技能为**非官方** Kimi Slides 逆向/衍生项目（源自 [MIT 的 `open-kimi-ppt-skill`](https://github.com/binaryify/open-kimi-ppt-skill)），未获 Moonshot AI 认可或支持。仅供学习与研究使用。
+> **免责声明**：本插件内含的 `kimi-ppt` 技能为**非官方**项目，未获 Moonshot AI 认可或支持。仅供学习与研究使用。
 
 ## 核心特性
 
@@ -40,7 +40,7 @@
 1. **安装插件**（DSH 用户级）：
    - **方式一：插件安装**（宿主自动把这技能挂到技能目录）：
      ```bash
-     dsh plugin --profile web add github:OMSociety/kimi-ppt-skill
+     dsh plugin --profile web add github:OMSociety/dsh-kimi-ppt
      ```
    - **方式二：手动放技能**（不装插件也能用）：克隆后把 `skills/kimi-ppt` 整个目录复制到 `~/.dsh/skills/kimi-ppt/`。
 2. **重启/刷新 DSH**：技能目录自动发现；对话里直接说"帮我做一份 PPT"即触发。
@@ -86,11 +86,10 @@
 
 ## 致谢
 
-- 核心源自 [`binaryify/open-kimi-ppt-skill`](https://github.com/binaryify/open-kimi-ppt-skill)（MIT，逆向 Kimi Slides）。
 - 基于 [DeepSeek Harness](https://github.com/deepseek-ai/deepseek-harness) 插件/技能体系。
 
 ## 许可证与作者
 
-[MIT](LICENSE)（衍生自 MIT 的 `open-kimi-ppt-skill`，保留原版权声明）。
+[MIT](LICENSE)。
 
 [OMSociety](https://github.com/OMSociety)
