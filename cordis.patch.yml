@@ -3,5 +3,5 @@
 # `name` is the module specifier DSH imports (the vendor/loader resolves
 # `options.name`), so it must be the published package name, not the repo name.
 - insert:
-    - id: kimi-ppt-skill
-      name: dsh-kimi-ppt-skill
+    - id: kimi-ppt
+      name: dsh-kimi-ppt

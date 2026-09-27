@@ -1,5 +1,5 @@
 /**
- * Cordis host plugin for dsh-kimi-ppt-skill.
+ * Cordis host plugin for dsh-kimi-ppt.
  *
  * One job: register the bundled `skills/kimi-ppt` as a DSH skill so the model
  * can load it. DSH discovers skills one level deep under a fixed set of roots,
@@ -19,7 +19,7 @@ import { existsSync, readFileSync } from 'node:fs'
 import path from 'node:path'
 import { fileURLToPath } from 'node:url'
 
-export const name = 'dsh-kimi-ppt-skill'
+export const name = 'dsh-kimi-ppt'
 export const inject = ['skills']
 
 const ROOT = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..')
@@ -53,7 +53,7 @@ function registerSkill(ctx) {
     })
     return typeof off === 'function' ? off : () => {}
   } catch (err) {
-    ctx.logger?.warn?.(`[dsh-kimi-ppt-skill] could not register the skill: ${err.message}`)
+    ctx.logger?.warn?.(`[dsh-kimi-ppt] could not register the skill: ${err.message}`)
     return () => {}
   }
 }
