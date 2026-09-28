@@ -10,6 +10,24 @@ All notable changes to this project are documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [1.1.1] - 2026-09-28
+
+### 修复
+
+- 注册 `kimi-ppt` 技能时补上 `source`，加载该技能不再报 `loaded skill "kimi-ppt" source must be a string`。
+
+### 变更
+
+- 声明宿主依赖区间 `>=0.1.5-rc.2 <0.3.0-0`（`peerDependencies`：`@deepseek-ai/dsh-skill`）。DSH 0.1.7-rc.1 起的兼容闸按该字段逐条判定插件能否在宿主上加载；本插件在 DSH 0.2.0-rc.1 上安装与加载正常。
+
+### Fixed
+
+- Skill registration now passes `source`, so the `kimi-ppt` skill no longer raises `loaded skill "kimi-ppt" source must be a string` when it is loaded.
+
+### Changed
+
+- Declared the host range `>=0.1.5-rc.2 <0.3.0-0` in `peerDependencies` (`@deepseek-ai/dsh-skill`). The compatibility gate in dsh 0.1.7-rc.1 and later checks this field entry by entry to decide whether the plugin may load on the host; this plugin installs and loads normally on dsh 0.2.0-rc.1.
+
 ## [1.1.0] - 2026-09-14
 
 ### 修复
