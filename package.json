@@ -35,6 +35,9 @@
     "README.md",
     "LICENSE"
   ],
+  "peerDependencies": {
+    "@deepseek-ai/dsh-skill": ">=0.1.5-rc.2 <0.3.0"
+  },
   "dsh": {
     "bundle": {
       "patch": "./cordis.patch.yml"
