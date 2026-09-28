@@ -29,6 +29,7 @@
     "./package.json": "./package.json"
   },
   "files": [
+    "CHANGELOG.md",
     "plugin",
     "skills",
     "cordis.patch.yml",
@@ -42,6 +43,9 @@
     "bundle": {
       "patch": "./cordis.patch.yml"
     }
+  },
+  "scripts": {
+    "prepack": "node scripts/clean-pycache.mjs"
   },
   "engines": {
     "node": ">=18"
