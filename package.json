@@ -36,7 +36,7 @@
     "LICENSE"
   ],
   "peerDependencies": {
-    "@deepseek-ai/dsh-skill": ">=0.1.5-rc.2 <0.3.0"
+    "@deepseek-ai/dsh-skill": ">=0.1.5-rc.2 <0.3.0-0"
   },
   "dsh": {
     "bundle": {
