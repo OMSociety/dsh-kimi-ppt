@@ -49,6 +49,11 @@ function registerSkill(ctx) {
       description: frontmatter.description,
       ...frontmatter.whenToUse !== void 0 ? { whenToUse: frontmatter.whenToUse } : {},
       content: body.trim(),
+      // `register()` fills `provider` but not `source`, and the registry's load path
+      // (`SkillRegistry.get()` -> `validateDefinition`) requires both to be strings:
+      // without `source` the skill shows up in the catalog and then throws on first
+      // load with `loaded skill "..." source must be a string`.
+      source: 'bundled',
       resourceBase: { kind: 'directory', path: SKILL_DIR }
     })
     return typeof off === 'function' ? off : () => {}
