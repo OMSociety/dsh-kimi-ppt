@@ -2,7 +2,7 @@
 
 <img src="https://raw.githubusercontent.com/OMSociety/dsh-kimi-ppt/main/docs/logo.png" width="120" alt="dsh-kimi-ppt logo"/>
 
-# dsh-kimi-ppt
+# DSH Kimi PPT
 
 **DeepSeek Harness 插件 —— 内含 kimi-ppt 技能：创建 / 编辑 / 复刻 / 导出 PPT，DSH 内纯本地导出**
 
