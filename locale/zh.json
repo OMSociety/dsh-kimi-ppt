@@ -1,0 +1,6 @@
+{
+  "meta": {
+    "title": "Kimi PPT",
+    "description": "创建、编辑、导出 PPT：本地生成 .pptx，Pillow 渲染预览，不需要浏览器。"
+  }
+}
