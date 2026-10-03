@@ -31,7 +31,7 @@ For property values that conflict, the first source with a value is found by sea
 
 #### 1. Text Styles Inside a Text Box
 
-**Priority chain:**
+**Priority chain**:
 1. Rich-text semantic tags such as `<u>`, `<sup>`, `<strong>` in [Text.content.text](#textcontent)
 2. Inline properties set in `<span style="...">`
 3. Paragraph properties set in `<p style="...">`
@@ -54,7 +54,7 @@ For property values that conflict, the first source with a value is found by sea
 
 #### 2. Table Cell Styles
 
-**Priority chain:**
+**Priority chain**:
 1. Rich-text semantic tags such as `<u>`, `<sup>`, `<strong>` in [Cell.text](#cell)
 2. Inline properties set in `<span style="...">`
 3. Paragraph properties set in `<p style="...">`
@@ -88,7 +88,7 @@ For property values that conflict, the first source with a value is found by sea
 
 Charts involve multiple kinds of styles (series body colors, fonts, data labels, axis/legend visibility, etc.), each with its own independent priority chain, explained below.
 
-**3.1 Series body color priority chain:**
+**3.1 Series body color priority chain**:
 1. A series' explicit `fill` / `lineColor` / `areaColor` (field names differ per type; see [Color Mechanism](#52-color-mechanism))
 2. The same-named field for the corresponding type in [Chart.seriesDefaults](#seriesdefaults)
 3. The [Theme.colors](#theme) theme color cycle (colors are picked in the order the series appear in the array)
@@ -97,19 +97,19 @@ Charts involve multiple kinds of styles (series body colors, fonts, data labels,
 >
 > For each type's specific color fields, derivation rules, and role mappings, see [§5.2 Color Mechanism](#52-color-mechanism).
 
-**3.2 Font priority chain:**
+**3.2 Font priority chain**:
 1. Sub-component `fontFamily` ([TitleConfig](#titleconfig) / [LegendConfig](#legendconfig) / [DataLabelConfig](#datalabelconfig) / [AxisConfig.label](#axisconfig) / [SpokeAxisConfig.label](#spokeaxisconfig))
 2. [Chart.fontFamily](#chart)
 3. Theme default ([Theme](#theme) or the PPTX master font)
 
-**3.3 dataLabels priority chain:**
+**3.3 dataLabels priority chain**:
 1. `series[i].dataLabels`
 2. [Chart.dataLabels](#chart) (global default)
 3. Not shown (equivalent to `show: false`)
 
 > Sub-fields follow a **one-level shallow merge**: `series.dataLabels` only overrides the sub-fields it explicitly provides; unprovided ones fall back from [Chart.dataLabels](#chart); if neither provides them, the per-type default applies (see [dataLabels.content value quick reference](#55-datalabelscontent-value-quick-reference)).
 
-**3.4 `seriesDefaults` merge rules:**
+**3.4 `seriesDefaults` merge rules**:
 
 [Chart.seriesDefaults](#seriesdefaults)`[type]` provides common defaults for all series of that type, merged with each series via a **one-level deep merge**:
 - **Scalar fields** (string / number / boolean): the series' explicit value overrides defaults
@@ -127,7 +127,7 @@ series:
     marker: {size: 12}     # after merge: {shape: circle, size: 12}, not {size: 12}
 ```
 
-**3.5 `boolean | Config` field convention:**
+**3.5 `boolean | Config` field convention**:
 
 Fields of the form `boolean | XxxConfig` (`marker` / `legend` / `AxisConfig.label / axisLine / gridLine` / `SpokeAxisConfig.label / axisLine / gridLine` / `colorbar`) uniformly follow:
 - `false` = off
@@ -148,14 +148,14 @@ project/
     1_cover.page       # one .page file per page
     2_intro.page
 ```
-**Path rules:**
+**Path rules**:
 1. **Fully self-contained**: all referenced files must be located inside the folder containing the `.pptd` file; **referencing files outside the directory is not allowed**
 2. **Only relative paths are supported** (relative to the directory containing the `.pptd` file):
    - The `pages` list in `.pptd`: `pages/1_cover.page`
    - Image paths in `.page`: `media/image1.jpg`
 3. **Media supports URLs**: `Image.src`, and the [ImageFill](#fill).src of `background` / `fill`, may be `https://...` (only jpg/jpeg/png/gif supported)
 
-**Main entry is required:** everything must be loaded through the `.pptd` main entry file; a `.page` cannot be passed alone to the `convert`/`check` commands
+**Main entry is required**: everything must be loaded through the `.pptd` main entry file; a `.page` cannot be passed alone to the `convert`/`check` commands
 
 ---
 
@@ -259,7 +259,7 @@ interface ImageCrop {
 }
 ```
 
-> **Constraint:** the four fields of `ImageCrop` are analogous, default 0. A positive value crops inward from the corresponding edge proportionally (inset); a negative value expands outward toward the corresponding edge proportionally and pads with transparent pixels (outset). Must ensure `left + right < 1` and `top + bottom < 1`, otherwise the source rectangle degenerates.
+> **Constraint**: the four fields of `ImageCrop` are analogous, default 0. A positive value crops inward from the corresponding edge proportionally (inset); a negative value expands outward toward the corresponding edge proportionally and pads with transparent pixels (outset). Must ensure `left + right < 1` and `top + bottom < 1`, otherwise the source rectangle degenerates.
 
 | ImageFit.mode | Description |
 |---|---|
@@ -295,9 +295,9 @@ interface ImageFill {
 
 > `GradientFill.angle` takes values in `[0, 360)`; `0` means left to right, increasing clockwise. Examples: `90` = top→bottom, `180` = right→left.
 
-> **ImageFill rendering order:** `crop` (adjust the source rectangle proportionally: positive values crop inward, negative values expand outward and pad with transparent pixels) → `fit` (adapt to the fill container per mode). The specific semantics of each `fit.mode` value are consistent with the "rendering logic" discussion in the [Image](#image-image) section.
+> **ImageFill rendering order**: `crop` (adjust the source rectangle proportionally: positive values crop inward, negative values expand outward and pad with transparent pixels) → `fit` (adapt to the fill container per mode). The specific semantics of each `fit.mode` value are consistent with the "rendering logic" discussion in the [Image](#image-image) section.
 
-**Examples:**
+**Examples**:
 
 ```yaml
 # Solid
@@ -339,7 +339,7 @@ interface Presentation {
 }
 ```
 
-**Example:**
+**Example**:
 
 ```yaml
 version: v2
@@ -482,7 +482,7 @@ interface Page {
 }
 ```
 
-**Example:**
+**Example**:
 
 ```yaml
 pageType: cover
@@ -562,7 +562,7 @@ interface TextContent {
 }
 ```
 
-**Examples:**
+**Examples**:
 
 ```yaml
 # Basic: theme style + plain text
@@ -734,7 +734,7 @@ interface Shape extends ElementBase {
 
 > **Note**: `shape` does not support embedded text! Add an extra text box to achieve that.
 
-**custom path conventions:**
+**custom path conventions**:
 - `viewBox`: view box, the path coordinate system `[w, h]`
 - `path`: SVG path string, supporting the `M / L / H / V / C / S / Q / A / Z` commands.
 - Multi-segment paths are supported for shapes such as hollow-outs: make the outer contour **clockwise** (`sweep=1`) and the inner contour **counterclockwise** (`sweep=0`) to achieve a hollow cutout
@@ -759,7 +759,7 @@ interface Shape extends ElementBase {
 | `wedgeRectCallout` | Rectangle callout | `[-20833, 62500]` |
 | `bracePair` | Brace pair | `[8333]` |
 
-**Examples:**
+**Examples**:
 
 ```yaml
 # Built-in shape
@@ -802,10 +802,10 @@ interface Line extends ElementBase {
 }
 ```
 
-> **Constraint:** `points` needs at least 2 points; the first point and the last point are points the curve passes through, the rest are bezier control points; all coordinates must be within `viewBox`.
-> **viewBox vs bounds:** at render time, the viewBox is stretched independently to the bounds size; to keep the line from being stretched out of shape, require `viewBoxW : viewBoxH = bounds.w : bounds.h`.
+> **Constraint**: `points` needs at least 2 points; the first point and the last point are points the curve passes through, the rest are bezier control points; all coordinates must be within `viewBox`.
+> **viewBox vs bounds**: at render time, the viewBox is stretched independently to the bounds size; to keep the line from being stretched out of shape, require `viewBoxW : viewBoxH = bounds.w : bounds.h`.
 
-**Examples:**
+**Examples**:
 
 ```yaml
 # Normalized coordinates: from top-left to bottom-right, the two middle points are control points
@@ -855,13 +855,13 @@ interface ShapeDef {
 
 > `ShapeDef` fields correspond one-to-one with the shape fields of the [Shape](#shape-shape) element; for detailed conventions (adjustments values and angle conversion, custom path rules, hollow rules, common shape table), see the [Shape](#shape-shape) section.
 
-**Rendering logic:** `crop` (proportionally adjust the source rectangle to get a sub-image: positive values crop inward, negative values expand outward and pad with transparent pixels) → `fit` (adapt the sub-image to the bounds container per mode) → `cropShape` (clip the final display area to the shape outline). All three can be set independently and are applied in the fixed order above.
+**Rendering logic**: `crop` (proportionally adjust the source rectangle to get a sub-image: positive values crop inward, negative values expand outward and pad with transparent pixels) → `fit` (adapt the sub-image to the bounds container per mode) → `cropShape` (clip the final display area to the shape outline). All three can be set independently and are applied in the fixed order above.
 
 - `fit.mode="cover"`: scale the sub-image proportionally to fill bounds; the overflow is cropped.
 - `fit.mode="contain"`: scale the sub-image proportionally to display it completely; the shortfall is left blank.
 - `fit.mode="fill"`: **the sub-image is stretched directly to fill bounds** — although no cropped blank edges are visible in this case, the picture content is still only the sub-region after crop, not the full original image.
 
-**Examples:**
+**Examples**:
 
 ```yaml
 - elementId: img-1
@@ -905,7 +905,7 @@ interface Icon extends ElementBase {
 }
 ```
 
-**iconName format:** `style:name`, using the Font Awesome 7.x free icon library.
+**iconName format**: `style:name`, using the Font Awesome 7.x free icon library.
 
 | Prefix | Style | Example |
 |------|------|------|
@@ -915,7 +915,7 @@ interface Icon extends ElementBase {
 
 Icon search: https://fontawesome.com/search?ic=free-collection
 
-**Example:**
+**Example**:
 
 ```yaml
 - elementId: icon-1
@@ -941,9 +941,9 @@ interface Table extends ElementBase {
 }
 ```
 
-> **PowerPoint limitation:** native tables cannot be rotated/flipped as a whole; whole-table global opacity including text and borders is also not supported. When whole rotation/flip/opacity is needed, render as an image first and treat it as an [Image](#image-image) element.
+> **PowerPoint limitation**: native tables cannot be rotated/flipped as a whole; whole-table global opacity including text and borders is also not supported. When whole rotation/flip/opacity is needed, render as an image first and treat it as an [Image](#image-image) element.
 
-> **Constraint:** each item of `columnWidths` and `rowHeights` is within `[0, 1]`, and the elements of each sum to 1.
+> **Constraint**: each item of `columnWidths` and `rowHeights` is within `[0, 1]`, and the elements of each sum to 1.
 
 #### Cell
 
@@ -976,7 +976,7 @@ interface Cell {
 }
 ```
 
-**Basic example (using theme styles):**
+**Basic example (using theme styles)**:
 
 ```yaml
 - elementId: table-basic
@@ -997,7 +997,7 @@ interface Cell {
       - text: "15.8"
 ```
 
-> **Merged-cell rules:** `rowSpan` / `colSpan` declare the merge range; **cells covered by the merged region are omitted from the `rows` array, with no `null` placeholder needed**. For example, after a top-left 2×2 merge, row 0's colSpan=2 covers (0,1), so that row only has two items ((0,0) merged cell + (0,2)); row 1 has (1,0) and (1,1) occupied by the merge, so it only has one item, (1,2).
+> **Merged-cell rules**: `rowSpan` / `colSpan` declare the merge range; **cells covered by the merged region are omitted from the `rows` array, with no `null` placeholder needed**. For example, after a top-left 2×2 merge, row 0's colSpan=2 covers (0,1), so that row only has two items ((0,0) merged cell + (0,2)); row 1 has (1,0) and (1,1) occupied by the merge, so it only has one item, (1,2).
 
 ```yaml
 - elementId: table-merged
@@ -1070,7 +1070,7 @@ type SeriesConfig =
 
 > `fill` / `border` / `shadow` control the **chart element's rectangular frame** (acting on the whole chart container), independent of the series body colors.
 >
-> **PowerPoint limitation:** native charts cannot be rotated/flipped as a whole; there is also no single global opacity property covering "the whole chart including title, axes, legend, labels, and series". When whole rotation/flip/opacity is needed, render as an image first and treat it as an [Image](#image-image) element.
+> **PowerPoint limitation**: native charts cannot be rotated/flipped as a whole; there is also no single global opacity property covering "the whole chart including title, axes, legend, labels, and series". When whole rotation/flip/opacity is needed, render as an image first and treat it as an [Image](#image-image) element.
 
 #### ChartData
 
@@ -1933,7 +1933,7 @@ interface Animation {
 }
 ```
 
-**Example:**
+**Example**:
 
 ```yaml
 elements:

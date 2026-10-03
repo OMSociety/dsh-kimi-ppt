@@ -80,13 +80,13 @@ When no better structure fits, start from "decision summary → goals and constr
 
 ### Common page types
 
-- **Concept / background page:** the necessary explanation paired with one main figure, whitespace spread around the main object.
-- **Architecture / flow page:** graphics dominate; text keeps only the conclusion, the legend, and necessary side notes.
-- **Comparison / selection page:** options compared on the same scale, dimensions, and coordinates.
-- **Metrics / benchmark page:** charts lead; test conditions, baselines, and conclusions stay close to the chart.
-- **Incident / timeline page:** chronological order is the main axis; impact, evidence, and handling stay close to their corresponding events.
-- **Implementation / migration page:** phases, dependencies, gates, and rollback points are laid out according to their real relationships.
-- **Appendix / sources page:** may be denser, but must stay scannable via columns, numbering, and stable line spacing.
+- **Concept / background page**: the necessary explanation paired with one main figure, whitespace spread around the main object.
+- **Architecture / flow page**: graphics dominate; text keeps only the conclusion, the legend, and necessary side notes.
+- **Comparison / selection page**: options compared on the same scale, dimensions, and coordinates.
+- **Metrics / benchmark page**: charts lead; test conditions, baselines, and conclusions stay close to the chart.
+- **Incident / timeline page**: chronological order is the main axis; impact, evidence, and handling stay close to their corresponding events.
+- **Implementation / migration page**: phases, dependencies, gates, and rollback points are laid out according to their real relationships.
+- **Appendix / sources page**: may be denser, but must stay scannable via columns, numbering, and stable line spacing.
 
 ## 6. Architecture Diagrams and Flowcharts
 
@@ -173,24 +173,24 @@ Samples are only for extracting mechanisms; wholesale replication is forbidden. 
 
 ### Sample A: Warm Orange & Cool Blue — White-Base Engineering Document Style
 
-- **Traits:** white background with black body text; the warm color carries titles and critical paths, the cool color carries nodes and structure; fixed header and page numbers; suited to reading and printing.
-- **Borrowable:** the warm/cool semantic division, a stable document axis, reuse of architecture coordinates, and hierarchical distinction through boundaries / nodes / paths.
-- **Good for reference:** architecture reviews, technical white papers, platform proposals, and materials that need to unfold the same architecture step by step.
-- **Not inherited automatically:** the orange and blue color values, Inter, the gradient-arc cover, orange table headers, and the fixed header position.
+- **Traits**: white background with black body text; the warm color carries titles and critical paths, the cool color carries nodes and structure; fixed header and page numbers; suited to reading and printing.
+- **Borrowable**: the warm/cool semantic division, a stable document axis, reuse of architecture coordinates, and hierarchical distinction through boundaries / nodes / paths.
+- **Good for reference**: architecture reviews, technical white papers, platform proposals, and materials that need to unfold the same architecture step by step.
+- **Not inherited automatically**: the orange and blue color values, Inter, the gradient-arc cover, orange table headers, and the fixed header position.
 
 ### Sample B: Four-Color Flat — Engineering Walkthrough Style
 
-- **Traits:** white background with dark-gray text, a few high-saturation semantic colors, flat structural diagrams, and solid-color section pages; suited to live walkthroughs and cross-role communication.
-- **Borrowable:** semantic color coding, solid-color section pauses, text/graphic zoning, direct labeling, and equal-width comparison columns.
-- **Good for reference:** product technical training, role collaboration, and talks balancing concepts and flows.
-- **Not inherited automatically:** the fixed four colors, solid-per-chapter backgrounds, the dual-ended footer, and specific brand fonts.
+- **Traits**: white background with dark-gray text, a few high-saturation semantic colors, flat structural diagrams, and solid-color section pages; suited to live walkthroughs and cross-role communication.
+- **Borrowable**: semantic color coding, solid-color section pauses, text/graphic zoning, direct labeling, and equal-width comparison columns.
+- **Good for reference**: product technical training, role collaboration, and talks balancing concepts and flows.
+- **Not inherited automatically**: the fixed four colors, solid-per-chapter backgrounds, the dual-ended footer, and specific brand fonts.
 
 ### Sample C: White Base & Deep Ink Blue — Two-Color Short-Line Engineering Walkthrough
 
-- **Traits:** deep ink-blue titles, short colored lines, and a white base forming a stable walkthrough skeleton; explanation pages alternate with evidence pages; visuals float directly on the white ground.
-- **Borrowable:** the fixed title axis, weak navigation, alternation of explanation and evidence, and reduced container noise.
-- **Good for reference:** live tech talks, building concepts step by step, and materials centered on screenshots and mechanism diagrams.
-- **Not inherited automatically:** the orange/green section colors, diagonal section color blocks, the deep-purple ending, the fixed short-line sizes, and the font combination.
+- **Traits**: deep ink-blue titles, short colored lines, and a white base forming a stable walkthrough skeleton; explanation pages alternate with evidence pages; visuals float directly on the white ground.
+- **Borrowable**: the fixed title axis, weak navigation, alternation of explanation and evidence, and reduced container noise.
+- **Good for reference**: live tech talks, building concepts step by step, and materials centered on screenshots and mechanism diagrams.
+- **Not inherited automatically**: the orange/green section colors, diagonal section color blocks, the deep-purple ending, the fixed short-line sizes, and the font combination.
 
 Do not write "choose Sample A / B / C" in the plan. If the result still clearly looks like a direct replica of some Sample once the text is hidden, keep adjusting — but do not break relationship expression and consistency just to be novel.
 

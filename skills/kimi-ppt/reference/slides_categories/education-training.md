@@ -8,12 +8,12 @@ Scope: courseware, job-skill training, operation guides, teacher materials, stud
 
 Before production, write down the following information; if any of it is missing, fill it in with reasonable assumptions and mark it in the design document.
 
-- **Learner:** age, level of expertise, prior knowledge, easily confused terms, accessibility needs.
-- **Usage:** live projection, printed handouts, self-study reading, or mixed use; roughly how long each page stays in view.
-- **Entry state:** what the learner does not know now, cannot do now, or is prone to getting wrong at which step.
-- **Exit capability:** after the material, what the learner can explain, differentiate, judge, operate, check, or retell. Goals must be observable.
-- **Material boundaries:** which parts are external facts, and which are team inferences, fictional exercises, illustrative data, or to-be-filled material.
-- **Real task:** in what work, classroom, or life scenario the learner will next apply this method.
+- **Learner**: age, level of expertise, prior knowledge, easily confused terms, accessibility needs.
+- **Usage**: live projection, printed handouts, self-study reading, or mixed use; roughly how long each page stays in view.
+- **Entry state**: what the learner does not know now, cannot do now, or is prone to getting wrong at which step.
+- **Exit capability**: after the material, what the learner can explain, differentiate, judge, operate, check, or retell. Goals must be observable.
+- **Material boundaries**: which parts are external facts, and which are team inferences, fictional exercises, illustrative data, or to-be-filled material.
+- **Real task**: in what work, classroom, or life scenario the learner will next apply this method.
 
 Do not first decide "use blue, use rounded corners, use some Sample" and then cram content into the pages. Every visual choice must be explainable as: it helped the learner see which relationship, remember which step, or complete which judgment.
 
@@ -21,22 +21,22 @@ Do not first decide "use blue, use rounded corners, use some Sample" and then cr
 
 The following are red lines running through the entire deck; they take effect before all layout and visual rules, and unless the user explicitly requests otherwise, none may be violated.
 
-- **No cards by default:** unless the user explicitly requests it, strictly forbid using rounded rectangles or rectangular cards to build hierarchy or alignment. Line segments, whitespace, and font-size/weight differences are better solutions.
-- **No evenly divided compositions:** unless no other layout is available, do not default to one-third splits, four-way splits, or 2×2 matrices — including formulaic patterns such as "title + three parallel blocks + conclusion."
-- **No mediocre, common, or AI-typical color schemes:** unless the user explicitly requests them, strictly forbid blue-and-white pairings, blue-purple gradients, cyan-purple neon, rainbow flares, glassmorphism cards, and glowing borders.
-- **No elements that clash with the overall style:** no styles from outside the chosen style may appear, such as using rounded icons or rounded rectangles within a sharp style.
+- **No cards by default**: unless the user explicitly requests it, strictly forbid using rounded rectangles or rectangular cards to build hierarchy or alignment. Line segments, whitespace, and font-size/weight differences are better solutions.
+- **No evenly divided compositions**: unless no other layout is available, do not default to one-third splits, four-way splits, or 2×2 matrices — including formulaic patterns such as "title + three parallel blocks + conclusion."
+- **No mediocre, common, or AI-typical color schemes**: unless the user explicitly requests them, strictly forbid blue-and-white pairings, blue-purple gradients, cyan-purple neon, rainbow flares, glassmorphism cards, and glowing borders.
+- **No elements that clash with the overall style**: no styles from outside the chosen style may appear, such as using rounded icons or rounded rectangles within a sharp style.
 
 ## 3. The Teaching Loop: Every Chapter and Every Page Needs a Take-Away Action
 
 The default learning path is: **orientation → comprehension → demonstration → practice → feedback → transfer**. Not every short material needs a separate page for each stage, but when a stage is missing, you must be able to say that the task itself does not call for it — not that the page ran out of space.
 
 - In live teaching, click-triggered animations may progressively present questions and answers, derivations, physical or mathematical processes, operational steps and error correction, or simulated physics or chemistry experiments; each click advances only one learning step, and self-study and printed materials use no animations by default.
-- **Orientation:** explain why this is worth learning, what the learner can do after completing it, and how it relates to the chapters before and after. Use a real problem or scenario instead of grand slogans.
-- **Comprehension:** first give one core definition the learner can retell, then the boundaries, composition, counterexamples, or relationships. New terms must not appear only in figure captions.
-- **Demonstration:** show the process and the intermediate judgments, not just the final answer; put the key forks, the basis for each choice, and the common misconceptions on the same reading path.
-- **Practice:** specify the input, the actions, and the completion criteria. Practice scenarios may be fictional, but must be labeled "practice scenario / illustrative material."
-- **Feedback:** explain why an answer is right or wrong, where the error lies, and how to check next time. Answer pages and question pages must be distinguishable at a glance.
-- **Transfer:** connect to real use with checklists, templates, job-aid cards, or next-step actions; do not substitute a slogan for transfer.
+- **Orientation**: explain why this is worth learning, what the learner can do after completing it, and how it relates to the chapters before and after. Use a real problem or scenario instead of grand slogans.
+- **Comprehension**: first give one core definition the learner can retell, then the boundaries, composition, counterexamples, or relationships. New terms must not appear only in figure captions.
+- **Demonstration**: show the process and the intermediate judgments, not just the final answer; put the key forks, the basis for each choice, and the common misconceptions on the same reading path.
+- **Practice**: specify the input, the actions, and the completion criteria. Practice scenarios may be fictional, but must be labeled "practice scenario / illustrative material."
+- **Feedback**: explain why an answer is right or wrong, where the error lies, and how to check next time. Answer pages and question pages must be distinguishable at a glance.
+- **Transfer**: connect to real use with checklists, templates, job-aid cards, or next-step actions; do not substitute a slogan for transfer.
 
 Each page carries only one primary learning action:
 
@@ -98,11 +98,11 @@ Make visual decisions in this order:
 
 When you receive a Sample, template, or screenshot, first look at the page's actual visual effect (do not just extract the copy), then write a "reference extraction card" recording only:
 
-- **Borrowable functions:** e.g., a stable grid, role color codes, step navigation, evidence zoning.
-- **Borrowable tone:** e.g., restrained, friendly, rigorous, live-event feel, or public-communication feel.
-- **Borrowable graphic grammar:** e.g., parallel modules, time paths, nested hierarchy, or photo frames.
-- **Objects that cannot be inherited:** the sample's brands, photos, characters, specific copy, proprietary color values, and decorative motifs.
-- **Applicable page types:** only note whether it suits concepts, cases, exercises, or steps — do not expand it into a whole-deck template.
+- **Borrowable functions**: e.g., a stable grid, role color codes, step navigation, evidence zoning.
+- **Borrowable tone**: e.g., restrained, friendly, rigorous, live-event feel, or public-communication feel.
+- **Borrowable graphic grammar**: e.g., parallel modules, time paths, nested hierarchy, or photo frames.
+- **Objects that cannot be inherited**: the sample's brands, photos, characters, specific copy, proprietary color values, and decorative motifs.
+- **Applicable page types**: only note whether it suits concepts, cases, exercises, or steps — do not expand it into a whole-deck template.
 
 One material borrows at most two or three mutually compatible features from a single reference sample; after borrowing, re-name the semantics of colors and components. Without a sample, still build the system yourself from the learning task. Sample 1 enjoys no default priority; it is only one reference direction for editorial-style courseware.
 
@@ -112,31 +112,31 @@ These directions help you understand design choices quickly; they are not fixed 
 
 ### Direction A: Editorial Study Handbook (May Reference Sample 1)
 
-- **Borrowable:** a clear title–exhibit–explanation hierarchy; a stable reading grid; few and explicit accent colors; cases, methods, and sources placed in their own zones; images separated from text.
-- **Suits:** concept teaching, methodology, case reading, blended courses, and materials that require self-study.
-- **No need to copy:** the blue-and-white palette, geometrically cropped images, capsule labels, fixed hairlines, large chapter whitespace, or any specific photo subject.
-- **Density note:** body pages are mainly medium density; cases and exercises can be fuller; only opening and closing pages drop density noticeably.
+- **Borrowable**: a clear title–exhibit–explanation hierarchy; a stable reading grid; few and explicit accent colors; cases, methods, and sources placed in their own zones; images separated from text.
+- **Suits**: concept teaching, methodology, case reading, blended courses, and materials that require self-study.
+- **No need to copy**: the blue-and-white palette, geometrically cropped images, capsule labels, fixed hairlines, large chapter whitespace, or any specific photo subject.
+- **Density note**: body pages are mainly medium density; cases and exercises can be fuller; only opening and closing pages drop density noticeably.
 
 ### Direction B: Role / System Infographics
 
-- **Borrowable:** stable color codes distinguishing roles or modules; nesting, sectors, matrices, or interlocking blocks expressing real relationships; action text kept tight against its owning module.
-- **Suits:** multi-role collaboration, public education, system composition, division of responsibilities, and action maps.
-- **No need to copy:** colorful collages, full-page color blocks, flat silhouettes, right-angled modules, or any specific color combinations.
-- **Density note:** the smaller the module, the shorter its text; relationship-diagram pages keep the necessary gaps; role-action pages may be denser, but meaning must never ride on color alone.
+- **Borrowable**: stable color codes distinguishing roles or modules; nesting, sectors, matrices, or interlocking blocks expressing real relationships; action text kept tight against its owning module.
+- **Suits**: multi-role collaboration, public education, system composition, division of responsibilities, and action maps.
+- **No need to copy**: colorful collages, full-page color blocks, flat silhouettes, right-angled modules, or any specific color combinations.
+- **Density note**: the smaller the module, the shorter its text; relationship-diagram pages keep the necessary gaps; role-action pages may be denser, but meaning must never ride on color alone.
 
 ### Direction C: Steps / Work Records
 
-- **Borrowable:** a persistently visible progress cue; numbered steps; clear containers for photos, screenshots, or worksheets; layered actions, risks, and check items.
-- **Suits:** operation guides, compliance, safety, job skills, and on-site training.
-- **No need to copy:** file folders, paper textures, monospaced labels, fixed bottom stacks, or any skeuomorphic decoration.
-- **Density note:** each step page answers at least "what to do, why, and how to check"; route and review pages are not emptied for decoration.
+- **Borrowable**: a persistently visible progress cue; numbered steps; clear containers for photos, screenshots, or worksheets; layered actions, risks, and check items.
+- **Suits**: operation guides, compliance, safety, job skills, and on-site training.
+- **No need to copy**: file folders, paper textures, monospaced labels, fixed bottom stacks, or any skeuomorphic decoration.
+- **Density note**: each step page answers at least "what to do, why, and how to check"; route and review pages are not emptied for decoration.
 
 ### Direction D: Evidence / Data Editorial (Build Your Own as Needed)
 
-- **Borrowable:** making charts, tables, or screenshots the main exhibit; the title gives the learning question or conclusion first; side text explains the measurement basis, the observation points, and the next step.
-- **Suits:** professional popular-science content, results interpretation, before-after comparison, research training, and courses needing evidence support.
-- **No need to copy:** dashboard black backgrounds, rainbow charts, giant numbers, dense annotations, or industry-specific brand styles.
-- **Density note:** data pages may be full, but each chart serves only one question; without data, do not force charts just to "look like a report."
+- **Borrowable**: making charts, tables, or screenshots the main exhibit; the title gives the learning question or conclusion first; side text explains the measurement basis, the observation points, and the next step.
+- **Suits**: professional popular-science content, results interpretation, before-after comparison, research training, and courses needing evidence support.
+- **No need to copy**: dashboard black backgrounds, rainbow charts, giant numbers, dense annotations, or industry-specific brand styles.
+- **Density note**: data pages may be full, but each chart serves only one question; without data, do not force charts just to "look like a report."
 
 If the topic fits none of these directions, establish a new reference direction and write down "what it helps the learner accomplish" — rather than adding more decorative rules to it.
 
@@ -144,15 +144,15 @@ If the topic fits none of these directions, establish a new reference direction 
 
 Every page is written as a minimal closed loop of "title + main exhibit + support layer + action / check + source." The following page types are composable — not all must be used.
 
-- **Learning route:** learning questions, chapter order, and exit capabilities; use short sentences and a path, not a long table of contents.
-- **Concept page:** one definition + boundaries / composition + one intuitive example or structural diagram.
-- **Method map:** the overall framework + current step / current module + a cue for what unfolds next.
-- **Demonstration page:** input material + intermediate judgments + basis for choices + result; put the error-prone forks on the same path.
-- **Case-evidence page:** a case-role label + factual material + interpretation + transferable judgments + source.
-- **Comparison / error-prone page:** two approaches or states placed side by side on the same skeleton + judgment criteria + common mistakes.
-- **Practice page:** task instructions + input / scenario + work area + completion criteria; do not hide the answer on the same page.
-- **Feedback page:** the reference approach + reasons + error location + how to check next time; make clear that this is the answer or the feedback.
-- **Transfer page:** checklists, templates, job-aid cards, resources, and next-step actions; avoid merely writing "apply what you learned."
+- **Learning route**: learning questions, chapter order, and exit capabilities; use short sentences and a path, not a long table of contents.
+- **Concept page**: one definition + boundaries / composition + one intuitive example or structural diagram.
+- **Method map**: the overall framework + current step / current module + a cue for what unfolds next.
+- **Demonstration page**: input material + intermediate judgments + basis for choices + result; put the error-prone forks on the same path.
+- **Case-evidence page**: a case-role label + factual material + interpretation + transferable judgments + source.
+- **Comparison / error-prone page**: two approaches or states placed side by side on the same skeleton + judgment criteria + common mistakes.
+- **Practice page**: task instructions + input / scenario + work area + completion criteria; do not hide the answer on the same page.
+- **Feedback page**: the reference approach + reasons + error location + how to check next time; make clear that this is the answer or the feedback.
+- **Transfer page**: checklists, templates, job-aid cards, resources, and next-step actions; avoid merely writing "apply what you learned."
 
 A presentation version may move extended explanation into speaker notes, but the page must still keep the learning question, the main exhibit, the task / judgment criteria, and the necessary sources. A self-study version writes the definitions and conditions needed for understanding on the page itself.
 
@@ -173,7 +173,7 @@ A presentation version may move extended explanation into speaker notes, but the
 - A page is usually governed by a neutral background + one main structural color; add a second color family only when a genuine role / category mapping exists.
 - Body text on dark grounds uses high-contrast light colors; body text on light grounds uses near-black. Small type never sits on high-saturation colors.
 
-**Starting point when there is no sample (not a fixed style):** adopt a near-white or light-gray background, near-black body text, one structural accent color, and one low-frequency semantic color; build the title-and-body hierarchy with a neutral sans-serif; pair a fixed title left axis with a "main exhibit + explanation / task" layout; keep body pages medium-leaning-full, with only covers, section openers, and closing pages noticeably dropping density. Then adjust by topic, audience, and material evidence — do not treat this starting set as a new template.
+**Starting point when there is no sample (not a fixed style)**: adopt a near-white or light-gray background, near-black body text, one structural accent color, and one low-frequency semantic color; build the title-and-body hierarchy with a neutral sans-serif; pair a fixed title left axis with a "main exhibit + explanation / task" layout; keep body pages medium-leaning-full, with only covers, section openers, and closing pages noticeably dropping density. Then adjust by topic, audience, and material evidence — do not treat this starting set as a new template.
 
 ### Cards, Components, and Graphics
 
