@@ -72,7 +72,7 @@
 | 学术衬线 | `思源宋体 CN` / `Georgia` | 论文/文学 |
 | 手写/特色 | `站酷文艺体` / `得意黑` / `飞波正点体` | 品牌/文化 |
 
-> **提示：**生成前跑 `check_fonts.py` 验证；缺失会提示并给本地替代（如 MiSans→更纱黑体 SC、QuattrocentoSans→Century Gothic）。
+> **提示**：生成前跑 `check_fonts.py` 验证；缺失会提示并给本地替代（如 MiSans→更纱黑体 SC、QuattrocentoSans→Century Gothic）。
 
 ## 常见问题
 
