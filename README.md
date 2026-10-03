@@ -1,6 +1,6 @@
 <div align="center">
 
-<img src="https://raw.githubusercontent.com/OMSociety/dsh-kimi-ppt/main/docs/logo.png" width="120" alt="dsh-kimi-ppt logo"/>
+<img src="https://raw.githubusercontent.com/OMSociety/dsh-kimi-ppt/main/docs/logo.png" width="160" alt="dsh-kimi-ppt logo"/>
 
 # DSH Kimi PPT
 
