@@ -6,11 +6,13 @@
 
 **DeepSeek Harness 插件 —— 内含 kimi-ppt 技能：创建 / 编辑 / 复刻 / 导出 PPT，DSH 内纯本地导出**
 
-[![Version](https://img.shields.io/github/v/tag/OMSociety/dsh-kimi-ppt?style=flat&color=blue)](https://github.com/OMSociety/dsh-kimi-ppt/releases)
-[![DeepSeek Harness](https://img.shields.io/badge/DeepSeek%20Harness-%3E%3D0.1.5--rc.2%20%3C0.3.0--0-8A2BE2?style=flat&logo=deepseek&logoColor=white)](https://github.com/deepseek-ai/deepseek-harness)
-[![License](https://img.shields.io/github/license/OMSociety/dsh-kimi-ppt?style=flat&color=green)](LICENSE)
-[![Stars](https://img.shields.io/github/stars/OMSociety/dsh-kimi-ppt?style=flat)](https://github.com/OMSociety/dsh-kimi-ppt)
-[![Issues](https://img.shields.io/github/issues/OMSociety/dsh-kimi-ppt?style=flat)](https://github.com/OMSociety/dsh-kimi-ppt/issues)
+  <p>
+    <a href="https://github.com/OMSociety/dsh-kimi-ppt/releases"><img src="https://img.shields.io/github/v/tag/OMSociety/dsh-kimi-ppt?color=4f6ef7&label=version" alt="Version"></a>
+    <a href="https://github.com/deepseek-ai/dsh"><img src="https://img.shields.io/badge/DSH-%3E%3D0.1.5--rc.2-4f6ef7" alt="DSH"></a>
+    <a href="LICENSE"><img src="https://img.shields.io/github/license/OMSociety/dsh-kimi-ppt?color=4f6ef7" alt="License"></a>
+    <a href="https://github.com/OMSociety/dsh-kimi-ppt/stargazers"><img src="https://img.shields.io/github/stars/OMSociety/dsh-kimi-ppt?color=4f6ef7" alt="Stars"></a>
+    <a href="https://github.com/OMSociety/dsh-kimi-ppt/issues"><img src="https://img.shields.io/github/issues/OMSociety/dsh-kimi-ppt?color=4f6ef7" alt="Issues"></a>
+  </p>
 
 **目录**：• [核心特性](#核心特性) • [功能概览](#功能概览) • [快速开始](#快速开始) • [命令](#命令) • [设计系统与字体](#设计系统与字体) • [常见问题](#常见问题) • [更新日志](#更新日志)
 </div>
