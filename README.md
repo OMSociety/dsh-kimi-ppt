@@ -7,14 +7,14 @@
 **DeepSeek Harness 插件 —— 内含 kimi-ppt 技能：创建 / 编辑 / 复刻 / 导出 PPT，DSH 内纯本地导出**
 
   <p>
-    <a href="https://github.com/OMSociety/dsh-kimi-ppt/releases"><img src="https://img.shields.io/github/v/tag/OMSociety/dsh-kimi-ppt?color=4f6ef7&label=version" alt="Version"></a>
+    <a href="https://www.npmjs.com/package/dsh-kimi-ppt"><img src="https://img.shields.io/npm/v/dsh-kimi-ppt?color=4f6ef7&label=version" alt="Version"></a>
     <a href="https://github.com/deepseek-ai/dsh"><img src="https://img.shields.io/badge/DSH-%3E%3D0.1.5--rc.2-4f6ef7" alt="DSH"></a>
     <a href="LICENSE"><img src="https://img.shields.io/github/license/OMSociety/dsh-kimi-ppt?color=4f6ef7" alt="License"></a>
     <a href="https://github.com/OMSociety/dsh-kimi-ppt/stargazers"><img src="https://img.shields.io/github/stars/OMSociety/dsh-kimi-ppt?color=4f6ef7" alt="Stars"></a>
     <a href="https://github.com/OMSociety/dsh-kimi-ppt/issues"><img src="https://img.shields.io/github/issues/OMSociety/dsh-kimi-ppt?color=4f6ef7" alt="Issues"></a>
   </p>
 
-**目录**：• [核心特性](#核心特性) • [功能概览](#功能概览) • [快速开始](#快速开始) • [命令](#命令) • [设计系统与字体](#设计系统与字体) • [常见问题](#常见问题) • [更新日志](#更新日志)
+**目录**：• [核心特性](#核心特性) • [功能概览](#功能概览) • [安装方式](#安装方式) • [命令](#命令) • [设计系统与字体](#设计系统与字体) • [常见问题](#常见问题) • [更新日志](#更新日志)
 </div>
 
 > **免责声明**：本插件内含的 `kimi-ppt` 技能为**非官方**项目，未获 Moonshot AI 认可或支持。仅供学习与研究使用。
@@ -37,14 +37,14 @@
 - **设计系统**：选题后套用预设主题（如学术答辩/咨询/金融），保证版式、配色、层级一致。
 - **DSH 本地导出与预览**（本仓库增强）：`pptd_to_pptx.py` 纯本地生成 PPTX；`pptd_to_png.py` 纯本地渲染每页预览图做视觉 QA，不依赖浏览器/外网。
 
-## 快速开始
+## 安装方式
 
-1. **安装插件**（DSH 用户级）：
-   - **方式一：插件安装**（宿主自动把这技能挂到技能目录）：
-     ```bash
-     dsh plugin --profile web add github:OMSociety/dsh-kimi-ppt
-     ```
-   - **方式二：手动放技能**（不装插件也能用）：克隆后把 `skills/kimi-ppt` 整个目录复制到 `~/.dsh/skills/kimi-ppt/`。
+1. **安装插件**（DSH 用户级，宿主自动把这技能挂到技能目录）：
+
+   ```powershell
+   # 先停掉正在运行的 DSH（运行中的服务会锁住依赖，装完再起）
+   dsh plugin --profile <profile> add "dsh-kimi-ppt"
+   ```
 2. **重启/刷新 DSH**：技能目录自动发现；对话里直接说"帮我做一份 PPT"即触发。
 
 > **依赖**：技能本地导出仅需 `python-pptx` + `Pillow` + `PyYAML`。浏览器导出（字体嵌入/淡入淡出）另需 Node 18+、`agent-browser`、Chromium 及可连 `www.kimi.com`。
