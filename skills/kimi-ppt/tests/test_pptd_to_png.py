@@ -157,13 +157,14 @@ class FailureTests(unittest.TestCase):
         body = ("elements:\n- elementId: ic1\n  elementType: icon\n  bounds: [0, 0, 20, 20]\n"
                 "- elementId: tb1\n  elementType: table\n  bounds: [0, 0, 20, 20]\n"
                 "- elementId: s1\n  elementType: shape\n  bounds: [0, 0, 20, 20]\n"
-                "  shapeName: star5\n  opacity: 0.5\n")
+                "  shapeName: star5\n  opacity: 0.5\n  flip: [true, false]\n")
         with tempfile.TemporaryDirectory() as name:
             write_deck(name, body)
             _path, err = run_main(name)
         self.assertIn("icon/ic1", err)
         self.assertIn("table/tb1", err)
         self.assertIn("opacity", err)
+        self.assertIn("flip not supported", err)
         self.assertIn("dropped total:", err)
 
 

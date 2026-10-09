@@ -7,6 +7,7 @@ dropped 降级清单、空 deck fail-fast、形状映射名。
 import contextlib
 import importlib.util
 import io
+import re
 import tempfile
 import unittest
 import xml.etree.ElementTree as ET
@@ -135,6 +136,16 @@ class ShapeMapTests(unittest.TestCase):
     def test_unknown_shape_falls_back_to_rect(self):
         self.assertIs(MODULE.find_shape("notAShapeAtAll"), MODULE.MSO_SHAPE.RECTANGLE)
 
+    def test_shape_map_keys_are_documented(self):
+        # 映射表的键必须全部出现在 reference/shapes.md 的枚举名单里；文档外的键
+        # 逐个豁免，防止再次出现 rightTriangle 这类静默漂移。
+        shapes_md = (Path(__file__).resolve().parents[1] / "reference" / "shapes.md").read_text(encoding="utf-8")
+        documented = {m.group(1) for m in re.finditer(r"^\|\s*([A-Za-z][A-Za-z0-9]*)\s*\|", shapes_md, re.M)}
+        documented.discard("shapeName")
+        aliases = {"circle"}  # OOXML 记作 ellipse，circle 是常用别名
+        undocumented = sorted(set(MODULE.SHAPE_MAP) - aliases - documented)
+        self.assertEqual(undocumented, [])
+
 
 class ExportEndToEndTests(unittest.TestCase):
     IMG = ("elements:\n- elementId: im1\n  elementType: image\n  bounds: [0, 0, 100, 100]\n"
@@ -207,6 +218,30 @@ class ExportEndToEndTests(unittest.TestCase):
         self.assertIn("opacity", err)
         self.assertIn("unknown shapeName", err)
         self.assertIn("dropped total:", err)
+
+    def test_crop_shape_and_image_fill_reported(self):
+        body = ("elements:\n- elementId: i1\n  elementType: image\n  bounds: [0, 0, 40, 40]\n"
+                "  src: media/wide.png\n  cropShape: {shapeName: roundRect}\n"
+                "- elementId: s1\n  elementType: shape\n  bounds: [0, 0, 20, 20]\n"
+                "  shapeName: rect\n  fill: {type: image, src: media/wide.png}\n")
+        with tempfile.TemporaryDirectory() as name:
+            write_deck(name, body)
+            _out, err = run_main(name)
+        self.assertIn("cropShape not supported", err)
+        self.assertIn("image fill on shape not supported", err)
+
+    def test_page_notes_flip_and_text_rotation_reported(self):
+        page_body = ('notes: "hello"\nelements:\n'
+                     '- elementId: s1\n  elementType: shape\n  bounds: [0, 0, 20, 20]\n'
+                     '  shapeName: rect\n  flip: [true, false]\n'
+                     '- elementId: t1\n  elementType: text\n  bounds: [0, 30, 60, 20]\n'
+                     '  rotation: 45\n  content: {text: hi}\n')
+        with tempfile.TemporaryDirectory() as name:
+            write_deck(name, page_body)
+            _out, err = run_main(name)
+        self.assertIn("speaker notes", err)
+        self.assertIn("flip not supported", err)
+        self.assertIn("rotation not supported", err)
 
 
 if __name__ == "__main__":
