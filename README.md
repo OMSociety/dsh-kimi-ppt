@@ -8,7 +8,7 @@
 
   <p>
     <a href="https://www.npmjs.com/package/dsh-kimi-ppt"><img src="https://img.shields.io/npm/v/dsh-kimi-ppt?color=4f6ef7&label=version" alt="Version"></a>
-    <a href="https://github.com/deepseek-ai/dsh"><img src="https://img.shields.io/badge/DSH-%3E%3D0.1.5--rc.2-4f6ef7" alt="DSH"></a>
+    <a href="https://github.com/deepseek-ai/dsh"><img src="https://img.shields.io/badge/DSH-%3E%3D0.1.5--rc.2%20%3C0.3-4f6ef7" alt="DSH"></a>
     <a href="LICENSE"><img src="https://img.shields.io/github/license/OMSociety/dsh-kimi-ppt?color=4f6ef7" alt="License"></a>
     <a href="https://github.com/OMSociety/dsh-kimi-ppt/stargazers"><img src="https://img.shields.io/github/stars/OMSociety/dsh-kimi-ppt?color=4f6ef7" alt="Stars"></a>
     <a href="https://github.com/OMSociety/dsh-kimi-ppt/issues"><img src="https://img.shields.io/github/issues/OMSociety/dsh-kimi-ppt?color=4f6ef7" alt="Issues"></a>
@@ -33,7 +33,7 @@
 ## 功能概览
 
 - **创建与编辑**：从零生成，或导入 `.pptx` 转 `.pptd` 再逐页精修、复刻图片/PDF 为 PPTD。
-- **双素材导出**：一个 deck 同时给出 ① 可继续编辑的 PPTD 项目目录；② 嵌入字体、带淡入淡出翻页的本地 PPTX（浏览器导出路径）。
+- **双素材导出**：一个 deck 同时给出 ① 可继续编辑的 PPTD 项目目录；② 纯本地生成的 `.pptx`；字体嵌入与淡入淡出转场由可选的桌面增强导出附加（需桌面环境与网络）。
 - **设计系统**：选题后套用预设主题（如学术答辩/咨询/金融），保证版式、配色、层级一致。
 - **DSH 本地导出与预览**（本仓库增强）：`pptd_to_pptx.py` 纯本地生成 PPTX；`pptd_to_png.py` 纯本地渲染每页预览图做视觉 QA，不依赖浏览器/外网。
 
@@ -45,21 +45,23 @@
    # 先停掉正在运行的 DSH（运行中的服务会锁住依赖，装完再起）
    dsh plugin --profile <profile> add "dsh-kimi-ppt"
    ```
-2. **重启/刷新 DSH**：技能目录自动发现；对话里直接说"帮我做一份 PPT"即触发。
 
-> **依赖**：技能本地导出仅需 `python-pptx` + `Pillow` + `PyYAML`。浏览器导出（字体嵌入/淡入淡出）另需 Node 18+、`agent-browser`、Chromium 及可连 `www.kimi.com`。
+   > **桌面版用户**：桌面的 `desktop` profile 由应用独占管理，CLI 无法代管安装；请在桌面应用内安装此插件。
+2. **重启 DSH**：技能目录自动发现；对话里直接说"帮我做一份 PPT"即触发。
+
+> **依赖**：本地导出仅需 `python-pptx` + `Pillow` + `PyYAML`。桌面增强导出（字体嵌入/淡入淡出）另需 Node.js 18+（含 npm）、`agent-browser`（由脚本经 npm 自动安装或升级，≥0.33.2）、Chrome 或 Edge，以及可连 `www.kimi.com` 与 `statics.moonshot.cn`（宿主页脚本 CDN）。
 
 ## 命令
 
-技能脚本位于 `skills/kimi-ppt/scripts/`（安装到 `~/.dsh/skills/kimi-ppt/scripts/`）：
+技能脚本随插件包安装，位于 profile 的 `node_modules/dsh-kimi-ppt/skills/kimi-ppt/scripts/`（desktop profile 实例：`~/.dsh/profiles/desktop/node_modules/dsh-kimi-ppt/skills/kimi-ppt/scripts/`）；脚本不会复制到 `~/.dsh/skills/`。下表中的 `scripts/...` 指该目录：
 
 | 命令 | 说明 |
 |---|---|
 | `python scripts/pptd_to_pptx.py <deck.pptd> -o <deck.pptx>` | 本地生成 PPTX（python-pptx，离线） |
 | `python scripts/pptd_to_png.py <deck.pptd> -o <.preview>` | 本地渲染每页预览图 + `overview.jpg` |
 | `python scripts/check_fonts.py <deck.pptd>` | 检查本机字体，输出 已装/缺失/替代 |
-| `python scripts/export_pptx.py <deck.pptd> -o <deck.pptx>` | 浏览器导出 PPTX（字体嵌入/淡入淡出，需桌面环境） |
-| `python scripts/export_images.py <deck.pptd> --output <.qa-images>` | 浏览器导出整页图（视觉 QA） |
+| `python scripts/export_pptx.py <deck.pptd> -o <deck.pptx>` | 桌面增强导出 PPTX（字体嵌入/淡入淡出，需桌面环境与网络） |
+| `python scripts/export_images.py <deck.pptd> --output <.qa-images>` | 桌面增强导出整页图（视觉 QA） |
 
 ## 设计系统与字体
 
@@ -79,8 +81,8 @@
 ## 常见问题
 
 - **字体变成底格（tofu）**：deck 用了未安装字体 → 改成本机字体或按映射替换；见 `reference/local-fonts.md`。
-- **浏览器导出失败**：`agent-browser` 建 socket 权限或连 `kimi.com` 超时 → 改用本地 `pptd_to_pptx.py` / `pptd_to_png.py`。
-- **本地导出没有字体嵌入/淡入淡出**：这两项仅在浏览器导出路径提供。
+- **桌面增强导出失败**：`agent-browser` 建 socket 权限或连 `kimi.com` / `statics.moonshot.cn` 超时 → 改用本地 `pptd_to_pptx.py` / `pptd_to_png.py`。
+- **本地导出没有字体嵌入/淡入淡出**：这两项仅在桌面增强导出提供。
 
 ## 更新日志
 

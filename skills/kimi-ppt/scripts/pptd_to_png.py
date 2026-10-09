@@ -10,7 +10,7 @@ pptd_to_png.py — 纯本地 .pptd -> 页面预览图 渲染器（Pillow，无�
 """
 import os, sys, re, argparse, html
 import yaml
-from PIL import Image, ImageDraw, ImageFont
+from PIL import Image, ImageDraw, ImageFont, ImageOps
 
 # 系统字体目录（Windows 动态解析系统盘与用户目录；POSIX 走 fontconfig / Font Book 常用路径）
 _WIN_FONTS = os.path.join(os.environ.get("SystemRoot", os.environ.get("WINDIR", r"C:\Windows")), "Fonts")
@@ -223,12 +223,43 @@ def font_file_for(name, bold):
     want = 700 if bold else 400
     cands.sort(key=lambda c: (c[3], c[0] != target, abs(c[2] - want)))
     return cands[0][1]
-    return cands[0][1]
 
 
-def resolve_color(c, theme_colors, fallback="000000"):
+# ---- 静默降级清单：凡未按 spec 渲染的元素/字段都记一条，结束统一打印 ----
+DROPPED = []
+_NOTE_SEEN = set()
+
+def _note(element_type, element_id, reason):
+    key = (str(element_type), str(element_id), reason)
+    if key in _NOTE_SEEN:
+        return
+    _NOTE_SEEN.add(key)
+    DROPPED.append(key)
+
+def _crop_fractions(crop):
+    """ImageCrop 四边比例（缺省 0）。负值（outset）或退化源区返回 None，由调用方降级。"""
+    if not crop:
+        return 0.0, 0.0, 0.0, 0.0
+    l = float(crop.get("left", 0) or 0)
+    t = float(crop.get("top", 0) or 0)
+    r = float(crop.get("right", 0) or 0)
+    b = float(crop.get("bottom", 0) or 0)
+    if min(l, t, r, b) < 0 or l + r >= 1 or t + b >= 1:
+        return None
+    return l, t, r, b
+
+# 预览轨支持的形状集（其余名字退矩形并计入 dropped）
+_PREVIEW_SHAPES = ("rect", "ellipse", "circle", "roundRect", "triangle", "diamond", "chevron")
+
+def _rotated_layer(bw, bh, angle, fn):
+    """在 bounds 尺寸透明层上绘制后绕中心旋转（PIL 逆时针为正，PPT 为顺时针）。"""
+    layer = Image.new("RGBA", (max(1, int(bw)), max(1, int(bh))), (0, 0, 0, 0))
+    fn(layer)
+    return layer.rotate(-float(angle), expand=False)
+
+def resolve_color(c, theme_colors, fallback=None):
     if c is None:
-        return "#" + fallback
+        return "#" + fallback if fallback else None
     s = str(c).strip()
     if s.startswith("$"):
         key = s[1:]
@@ -237,7 +268,7 @@ def resolve_color(c, theme_colors, fallback="000000"):
         return "#" + {"black": "111111", "white": "FFFFFF", "red": "E30613",
                       "yellow": "FFC300", "blue": "0066B3", "gray": "F4F4F2",
                       "text": "222222", "accent": "FFC300", "primary": "0066B3",
-                      "secondary": "555555"}.get(key, fallback)
+                      "secondary": "555555"}.get(key, fallback or "000000")
     return "#" + s.replace("#", "")
 
 def plain_paragraphs(text):
@@ -267,9 +298,71 @@ def shape_pts(kind, x, y, w, h, border_ex, scale):
         return None  # 复杂星形，退回矩形
     return None      # 退回矩形
 
-def draw_text(draw, el, theme, scale, w, h, colors):
+def _draw_shape_range(d, el, colors, scale, ox, oy):
+    """在 (ox, oy) 处画一个 shape 元素（本地轨道形状子集）。"""
+    sn = el.get("shapeName", "rect")
+    bw, bh = [v * scale for v in el.get("bounds", [0, 0, 100, 40])[2:4]]
+    x, y = ox, oy
+    if sn == "custom":
+        # 与 pptx 轨一致：灰描边空心占位
+        d.rectangle([x, y, x + bw, y + bh], outline="#888888", width=max(1, int(scale)))
+        return
+    fill = el.get("fill")
+    if not fill:
+        fc = None                                  # 无填充（pptd.md: default not applied）
+    elif fill.get("type", "solid") == "solid":
+        fc = resolve_color(fill.get("color"), colors)
+    elif fill.get("type") == "gradient":
+        stops = fill.get("stops") or []
+        fc = resolve_color(stops[0].get("color") if stops else None, colors)
+    else:
+        fc = None
+    border = el.get("border") or {}
+    bc = resolve_color(border.get("color"), colors, "000000") if border else None
+    bwd = max(1, int(float(border.get("width", 1)) * scale)) if border else 0
+    if sn in ("ellipse", "circle"):
+        d.ellipse([x, y, x + bw, y + bh], fill=fc, outline=bc, width=bwd)
+    elif sn == "roundRect":
+        d.rounded_rectangle([x, y, x + bw, y + bh], radius=int(min(bw, bh) * 0.1),
+                            fill=fc, outline=bc, width=bwd)
+    elif sn in ("triangle", "diamond", "chevron"):
+        pts = shape_pts(sn, x, y, bw, bh, border, scale)
+        if pts:
+            d.polygon(pts, fill=fc, outline=bc)
+        else:
+            d.rectangle([x, y, x + bw, y + bh], fill=fc, outline=bc, width=bwd)
+    else:
+        d.rectangle([x, y, x + bw, y + bh], fill=fc, outline=bc, width=bwd)
+
+def _draw_line_range(d, el, colors, scale, ox, oy):
+    """在 (ox, oy) 处画 line 元素：points 从 viewBox 坐标系映射到 bounds，取首末点。"""
+    bw, bh = [v * scale for v in el.get("bounds", [0, 0, 100, 40])[2:4]]
+    pts = (el.get("points") or "0,0 1,1").split()
+    p0 = [float(a) for a in pts[0].split(",")]
+    p1 = [float(a) for a in pts[-1].split(",")]
+    vb = el.get("viewBox")
+    if isinstance(vb, (list, tuple)) and len(vb) == 2 and float(vb[0]) and float(vb[1]):
+        x0, y0 = ox + p0[0] / float(vb[0]) * bw, oy + p0[1] / float(vb[1]) * bh
+        x1, y1 = ox + p1[0] / float(vb[0]) * bw, oy + p1[1] / float(vb[1]) * bh
+    else:
+        x0, y0 = ox + p0[0] * scale, oy + p0[1] * scale
+        x1, y1 = ox + p1[0] * scale, oy + p1[1] * scale
+    lc = resolve_color((el.get("border") or {}).get("color"), colors, "000000")
+    d.line([(x0, y0), (x1, y1)], fill=lc,
+           width=max(1, int(float((el.get("border") or {}).get("width", 1)) * scale)))
+
+def _emit(img, x, y, bw, bh, angle, paint):
+    """把 paint(container, ox, oy) 落图；rotation ≠ 0 时画进透明层绕中心旋转后贴回。"""
+    if angle:
+        layer = _rotated_layer(bw, bh, angle, lambda L: paint(L, 0, 0))
+        img.paste(layer, (int(x), int(y)), layer)
+    else:
+        paint(img, x, y)
+
+def draw_text(draw, el, theme, scale, colors, ox, oy):
     c = el.get("content", {})
-    x, y, bw, bh = [v * scale for v in el.get("bounds", [0, 0, 100, 40])]
+    bw, bh = [v * scale for v in el.get("bounds", [0, 0, 100, 40])[2:4]]
+    x, y = ox, oy
     tc = theme.get("textStyles", {})
     base = {}
     st = c.get("style")
@@ -334,58 +427,94 @@ def render_page(page, theme, colors, size, scale, page_no):
         if stops:
             gc = resolve_color(stops[0].get("color"), colors, "FFFFFF")
             drw.rectangle([0, 0, W, H], fill=gc)
+    if page.get("notes"):
+        _note("page", str(page_no - 1), "speaker notes not supported in preview")
+    if page.get("animations"):
+        _note("page", str(page_no - 1), "animations not supported in preview")
     # 元素（按顺序 = 层序）
     for el in page.get("elements", []):
         et = el.get("elementType")
+        eid = el.get("elementId", "?")
         x, y, bw, bh = [v * scale for v in el.get("bounds", [0, 0, 100, 40])]
+        angle = float(el.get("rotation") or 0)
+        if el.get("opacity") not in (None, 1, 1.0):
+            _note(et, eid, "opacity not supported in preview")
+        fl = el.get("flip")
+        if fl and any(fl):
+            _note(et, eid, "flip not supported in preview")
         if et == "shape":
             sn = el.get("shapeName", "rect")
-            fill = el.get("fill") or {}
-            fc = resolve_color(fill.get("color"), colors)
-            border = el.get("border") or {}
-            bc = resolve_color(border.get("color"), colors, "000000")
-            bwd = int(float(border.get("width", 0)) * scale)
-            if sn in ("ellipse", "circle"):
-                drw.ellipse([x, y, x + bw, y + bh], fill=fc,
-                            outline=bc if border else None, width=bwd)
-            elif sn == "roundRect":
-                drw.rounded_rectangle([x, y, x + bw, y + bh], radius=int(min(bw, bh) * 0.1),
-                                      fill=fc, outline=bc if border else None, width=bwd)
-            elif sn in ("triangle", "diamond", "chevron"):
-                pts = shape_pts(sn, x, y, bw, bh, border, scale)
-                if pts:
-                    drw.polygon(pts, fill=fc,
-                                outline=bc if border else None)
-                else:
-                    drw.rectangle([x, y, x + bw, y + bh], fill=fc)
-            else:
-                drw.rectangle([x, y, x + bw, y + bh], fill=fc,
-                              outline=bc if border else None, width=bwd)
+            if sn not in _PREVIEW_SHAPES:
+                _note(et, eid, f'shapeName "{sn}" rendered as rect in preview')
+            if (el.get("fill") or {}).get("type") == "image":
+                _note(et, eid, "image fill on shape not supported in preview")
+            _emit(img, x, y, bw, bh, angle,
+                  lambda C, ox, oy: _draw_shape_range(ImageDraw.Draw(C), el, colors, scale, ox, oy))
         elif et == "text":
-            draw_text(drw, el, theme, scale, w, h, colors)
+            _emit(img, x, y, bw, bh, angle,
+                  lambda C, ox, oy: draw_text(ImageDraw.Draw(C), el, theme, scale, colors, ox, oy))
         elif et == "line":
-            pts = (el.get("points") or "0,0 1,1").split()
-            p0 = [float(a) for a in pts[0].split(",")]
-            p1 = [float(a) for a in pts[-1].split(",")]
-            lc = resolve_color((el.get("border") or {}).get("color"), colors, "000000")
-            drw.line([(x + p0[0] / 1, y + p0[1] / 1), (x + p1[0] / 1, y + p1[1] / 1)],
-                     fill=lc, width=max(1, int(float((el.get("border") or {}).get("width", 1)) * scale)))
+            if len((el.get("points") or "0,0 1,1").split()) > 2:
+                _note(et, eid, "control points degraded to straight segment")
+            _emit(img, x, y, bw, bh, angle,
+                  lambda C, ox, oy: _draw_line_range(ImageDraw.Draw(C), el, colors, scale, ox, oy))
         elif et == "image":
             src = el.get("src")
-            if src and os.path.isfile(os.path.join(os.path.dirname(manifest), src)):
+            path = os.path.join(os.path.dirname(manifest), src) if src else None
+            if path and os.path.isfile(path):
+                fit = el.get("fit")
+                mode = fit.get("mode") if isinstance(fit, dict) else None
+                mode = mode or "cover"
+                if mode not in ("cover", "contain", "fill"):
+                    _note(et, eid, f'unknown fit mode "{mode}" rendered as cover')
+                    mode = "cover"
+                if el.get("cropShape"):
+                    _note(et, eid, "cropShape not supported in preview")
+                crop = el.get("crop")
+                fr = _crop_fractions(crop)
+                if fr is None:
+                    if crop:
+                        _note(et, eid, "crop outset not supported in preview; crop ignored")
+                    fr = (0.0, 0.0, 0.0, 0.0)
+
+                def paint_im(C, ox, oy, path=path, mode=mode, fr=fr, bw=bw, bh=bh):
+                    im = Image.open(path).convert("RGB")
+                    iw0, ih0 = im.size
+                    if any(fr):
+                        im = im.crop((int(iw0 * fr[0]), int(ih0 * fr[1]),
+                                      iw0 - int(iw0 * fr[2]), ih0 - int(ih0 * fr[3])))
+                    tw, th = max(1, int(bw)), max(1, int(bh))
+                    if mode == "contain":
+                        k = min(bw / im.width, bh / im.height)
+                        nw, nh = max(1, int(im.width * k)), max(1, int(im.height * k))
+                        C.paste(im.resize((nw, nh), Image.LANCZOS),
+                                (int(ox + (bw - nw) / 2), int(oy + (bh - nh) / 2)))
+                    elif mode == "fill":
+                        C.paste(im.resize((tw, th), Image.LANCZOS), (int(ox), int(oy)))
+                    else:
+                        C.paste(ImageOps.fit(im, (tw, th), method=Image.LANCZOS), (int(ox), int(oy)))
+
                 try:
-                    im = Image.open(os.path.join(os.path.dirname(manifest), src)).convert("RGB")
-                    im = im.resize((int(bw), int(bh)))
-                    img.paste(im, (int(x), int(y)))
+                    _emit(img, x, y, bw, bh, angle, paint_im)
                 except Exception:
                     pass
-        # icon/table/chart：跳过（略）
+            # 远程/缺失图跳过（SKILL.md 声明的降级）
+        elif et == "icon":
+            _note(et, eid, "icon elements are not rendered in preview")
+        elif et == "table":
+            _note(et, eid, "table elements are not rendered in preview")
+        elif et == "chart":
+            _note(et, eid, "chart elements are not rendered in preview")
+        else:
+            _note(et, eid, "unknown elementType not rendered in preview")
     out = os.path.join(outdir, f"page_{page_no}.png")
     img.save(out)
     return out, img
 
 def main():
     global manifest, outdir
+    DROPPED.clear()
+    _NOTE_SEEN.clear()
     ap = argparse.ArgumentParser()
     ap.add_argument("manifest")
     ap.add_argument("-o", "--output")
@@ -399,8 +528,11 @@ def main():
     size = m.get("size", [960, 540])
     theme = m.get("theme", {}) or {}
     colors = theme.get("colors", {}) or {}
+    pages = m.get("pages") or []
+    if not pages:
+        sys.exit("pages 列表必须非空：deck 至少要有一页")
     imgs = []
-    for i, rel in enumerate(m.get("pages", []), 1):
+    for i, rel in enumerate(pages, 1):
         page = yaml.safe_load(open(os.path.join(base, rel), encoding="utf-8"))
         out, img = render_page(page, theme, colors, size, args.scale, i)
         imgs.append((rel, img))
@@ -417,6 +549,9 @@ def main():
         ovp = os.path.join(outdir, "overview.jpg")
         ov.save(ovp, quality=92)
         print("overview", ovp)
+    for tp, eid, reason in DROPPED:
+        print(f"dropped: {tp}/{eid}: {reason}", file=sys.stderr)
+    print(f"dropped total: {len(DROPPED)}", file=sys.stderr)
 
 if __name__ == "__main__":
     main()

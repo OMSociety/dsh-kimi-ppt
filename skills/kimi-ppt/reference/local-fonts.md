@@ -1,6 +1,6 @@
 # 本地导出字体（以运行时实装为准）
 
-> 本文件是**本地导出**的字体基准：**设计选型读 `fonts.md`**（规范名、是否风格化），**本地落地命中读本文件**——`fonts.md` 的规范名表达设计意图、供浏览器导出用，本地导出必须写实装名：`fontFamily` 填下表的「实际安装名」，或让导出器按下表映射（规范名 ≠ 实装名时以实装名为准）。
+> 本文件是**本地导出**的字体基准：**设计选型读 `fonts.md`**（规范名、是否风格化），**本地落地命中读本文件**——`fonts.md` 的规范名表达设计意图、供桌面增强导出用，本地导出必须写实装名：`fontFamily` 填下表的「实际安装名」，或让导出器按下表映射（规范名 ≠ 实装名时以实装名为准）。
 >
 > 下表只是常见实装名的参考：以 `SKILL.md`「三、字体核对」里 `check_fonts.py` 在本机的输出为准，确需长期复用时再把自己机器上的结果回写本表。
 >
@@ -40,7 +40,7 @@
 | Coda | `Coda` | ✅ OFL | |
 | Jersey15 | `Jersey 15` | ✅ OFL | |
 | Jersey20Charted | `Jersey 20 Charted` | ✅ OFL | |
-| SortsMillGoudy | `Sorts Mill Goudy`（注意空格） | ✅ OFL | （SourcesMillGoudy-Regular/Italic.ttf） |
+| SortsMillGoudy | `Sorts Mill Goudy`（注意空格） | ✅ OFL | （SortsMillGoudy-Regular/Italic.ttf） |
 
 ### 本地常见补充（系统预装 / 免费商用）
 | 字体 | 用途建议 |

@@ -1,4 +1,4 @@
-# Pine Green Strategy · consulting STYLE DESIGN SYSTEM
+# Pine Green Strategy · Consulting STYLE DESIGN SYSTEM
 
 ## PART A — Category Baseline (General Minimum)
 

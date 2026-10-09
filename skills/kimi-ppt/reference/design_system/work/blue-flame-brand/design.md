@@ -1,4 +1,4 @@
-# Blue Flame Brand · work_report STYLE DESIGN SYSTEM
+# Blue Flame Brand · Work STYLE DESIGN SYSTEM
 
 ## PART A — work_report Baseline (Universal Floor)
 

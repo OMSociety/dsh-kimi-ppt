@@ -1,4 +1,4 @@
-# Deep Blue Atlas · academic STYLE DESIGN SYSTEM
+# Deep Blue Atlas · Academic STYLE DESIGN SYSTEM
 
 ## PART A — academic Baseline (Universal Floor)
 

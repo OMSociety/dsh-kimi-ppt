@@ -1,4 +1,4 @@
-# Warm Clay Works · work_report STYLE DESIGN SYSTEM
+# Warm Clay Works · Work STYLE DESIGN SYSTEM
 
 ## PART A — work_report Baseline (Universal Floor)
 

@@ -1,9 +1,10 @@
 #!/usr/bin/env python3
 """Export a PPTD project through Kimi's public browser-side PPTX writer.
 
-The script uses a temporary localhost SDK host and agent-browser. It never uploads
-the PPTD project as a document. Referenced remote resources may still be fetched by
-the official editor. Local image files are exposed to the iframe as data URLs.
+The script itself performs no upload: the PPTD content is handed to the official
+editor by the local browser session this script drives. Referenced remote
+resources may still be fetched by that editor. Local image files are exposed to
+the iframe as data URLs.
 """
 
 from __future__ import annotations
@@ -49,6 +50,13 @@ FADE_TRANSITION_XML = (
 MIN_AGENT_BROWSER_VERSION = (0, 33, 2)
 MIN_NODE_MAJOR = 18
 NODE_INSTALL_HINT = "Install Node.js 18+ from https://nodejs.org, then retry."
+
+try:
+    import websocket as _websocket
+
+    _WS_ERRORS: Tuple[type, ...] = (_websocket.WebSocketException,)
+except ImportError:  # websocket-client is installed on demand by export_images.py
+    _WS_ERRORS = ()
 
 
 class ExportError(RuntimeError):
@@ -153,7 +161,16 @@ def ensure_pyyaml() -> Any:
     return yaml
 
 
-yaml = ensure_pyyaml()
+_YAML = None
+
+
+def _yaml() -> Any:
+    """Lazy PyYAML accessor: importing this module (or running --help) must not
+    trigger the pip --user fallback inside ensure_pyyaml()."""
+    global _YAML
+    if _YAML is None:
+        _YAML = ensure_pyyaml()
+    return _YAML
 
 
 def parse_version(output: str) -> Tuple[int, int, int]:
@@ -347,6 +364,7 @@ def find_manifest(source: Path) -> Path:
 
 def read_yaml_mapping(path: Path) -> Tuple[str, Dict[str, Any]]:
     text = path.read_text(encoding="utf-8")
+    yaml = _yaml()
     try:
         value = yaml.safe_load(text)
     except yaml.YAMLError as exc:
@@ -373,6 +391,8 @@ def build_image_map(root: Path) -> Dict[str, str]:
     for path in sorted(root.rglob("*")):
         if not path.is_file() or path.suffix.lower() not in IMAGE_MIME:
             continue
+        if any(part.startswith(".") for part in path.relative_to(root).parts[:-1]):
+            continue  # 派生目录（.preview/.qa-images 等）不进导出载荷
         size = path.stat().st_size
         if size > MAX_IMAGE_BYTES:
             log(f"skip local image over 20 MiB: {path.relative_to(root)}")
@@ -544,7 +564,7 @@ def is_pptx(path: Path) -> bool:
 
 def find_download(
     search_roots: Iterable[Path],
-    timeout: float = 150.0,
+    timeout: float,
     accept: Callable[[Path], bool] = is_pptx,
     *,
     since: Optional[float] = None,
@@ -560,7 +580,7 @@ def find_download(
         for root in search_roots:
             if not root.exists():
                 continue
-            for path in root.rglob("*"):
+            for path in root.rglob("*.pptx"):
                 if not path.is_file():
                     continue
                 try:
@@ -568,9 +588,17 @@ def find_download(
                 except OSError:
                     continue
                 entries.append((path, info.st_mtime, info.st_size))
-        for path, mtime, size in sorted(entries, key=lambda entry: entry[1], reverse=True):
-            if since is not None and mtime < since:
-                continue
+        fresh = [entry for entry in entries if since is None or entry[1] >= since]
+        if fresh:
+            newest_mtime = max(mtime for _path, mtime, _size in fresh)
+            newest = [entry for entry in fresh if entry[1] == newest_mtime]
+            if len(newest) > 1:
+                names = "\n  ".join(str(entry[0]) for entry in newest)
+                raise ExportError(
+                    "ambiguous download: several files share the newest timestamp; "
+                    f"refusing to guess which one is the export:\n  {names}"
+                )
+            path, _mtime, size = newest[0]
             if size == last_sizes.get(path) and size > 0:
                 stable[path] = stable.get(path, 0) + 1
             else:
@@ -869,6 +897,13 @@ def main(argv: Optional[Sequence[str]] = None) -> int:
             args.keep_browser_raw,
             args.force,
         )
+    except _WS_ERRORS as exc:
+        print(
+            f"kimi-ppt export failed: browser CDP connection error ({exc}); "
+            "check the debug browser and its remote debugging port",
+            file=sys.stderr,
+        )
+        return 1
     except (ExportError, OSError, subprocess.SubprocessError) as exc:
         print(f"kimi-ppt export failed: {exc}", file=sys.stderr)
         return 1

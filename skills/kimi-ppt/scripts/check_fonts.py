@@ -77,8 +77,6 @@ ALTERNATIVES = {
     "精品点阵体": ["SimSun", "SimHei"],
 }
 
-REG_RE = r"^(\S[^\(]*?)\s*\("
-
 # 系统字体目录：Windows 动态解析系统盘与用户目录；POSIX 走 fontconfig / Font Book 的常用路径
 _WIN_FONTS = os.path.join(os.environ.get("SystemRoot", os.environ.get("WINDIR", r"C:\Windows")), "Fonts")
 FONT_DIRS = [
@@ -108,23 +106,29 @@ def _font_files():
 
 
 def installed_families():
-    """Windows：从注册表读已装字体族名集合（已归一化，去掉 (TrueType) 与后缀）。"""
+    """Windows：从注册表读已装字体族名集合（HKLM 全机 + HKCU 当前用户，合并去重；已归一化，去掉 (TrueType) 与后缀）。"""
     import winreg
     key = r"SOFTWARE\Microsoft\Windows NT\CurrentVersion\Fonts"
-    fams = []
-    k = winreg.OpenKey(winreg.HKEY_LOCAL_MACHINE, key)
-    i = 0
-    while True:
+    fams = set()
+    for root in (winreg.HKEY_LOCAL_MACHINE, winreg.HKEY_CURRENT_USER):
         try:
-            name, _val, _t = winreg.EnumValue(k, i)
+            k = winreg.OpenKey(root, key)
         except OSError:
-            break
-        norm = re.sub(r"\s*\([^)]*\)\s*$", "", name).strip()
-        if norm:
-            fams.append(norm.lower())
-        i += 1
-    winreg.CloseKey(k)
-    return set(fams)
+            if root == winreg.HKEY_LOCAL_MACHINE:
+                raise
+            continue
+        i = 0
+        while True:
+            try:
+                name, _val, _t = winreg.EnumValue(k, i)
+            except OSError:
+                break
+            norm = re.sub(r"\s*\([^)]*\)\s*$", "", name).strip()
+            if norm:
+                fams.add(norm.casefold())
+            i += 1
+        winreg.CloseKey(k)
+    return fams
 
 
 def installed_families_posix():
@@ -141,21 +145,19 @@ def installed_families_posix():
     return fams
 
 def normalize_req(name):
-    # 归一化规范名，方便与注册表条目「包含/起始」匹配
-    return re.sub(r"\s*\([^)]*\)\s*$", "", name).strip().lower()
+    # 归一化规范名，方便与注册表条目「全等/词边界前缀」匹配
+    return re.sub(r"\s*\([^)]*\)\s*$", "", name).strip().casefold()
 
 def present(fam_set, req_installed):
-    """判断实装名是否出现在本机。用「起始包含」容忍字重/变体后缀。"""
+    """判断实装名是否出现在本机。全等命中，或前缀匹配且边界为空格/连字符（容忍字重/变体后缀）。"""
     r = normalize_req(req_installed)
     if not r:
         return False
     for f in fam_set:
-        if f == r:
+        fc = f.casefold()
+        if fc == r:
             return True
-        if f.startswith(r + " ") or f.startswith(r + "\u3000"):
-            return True
-        if len(r) >= 2 and f.startswith(r):
-            # 中文/特殊实装名常在族名后直接跟字重或版本后缀，中间没有分隔符
+        if fc.startswith(r) and len(fc) > len(r) and fc[len(r)] in (" ", "-"):
             return True
     return False
 

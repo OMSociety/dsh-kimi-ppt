@@ -1,0 +1,3 @@
+# 文本文件仓库内统一为 LF（index 已全 LF；core.autocrlf 只影响 checkout 呈现）
+* text=auto
+*.png binary

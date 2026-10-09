@@ -1,4 +1,4 @@
-# Silk Yellow Magazine · brand_campaign STYLE DESIGN SYSTEM
+# Silk Yellow Magazine · Promotion STYLE DESIGN SYSTEM
 
 ## PART A — Category Baseline (Universal Minimum)
 

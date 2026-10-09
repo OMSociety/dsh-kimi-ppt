@@ -1,4 +1,4 @@
-# Electric Violet Business · WORK REPORT STYLE DESIGN SYSTEM
+# Electric Violet Business · Work STYLE DESIGN SYSTEM
 
 ## PART A — Category Baseline (Universal Floor)
 

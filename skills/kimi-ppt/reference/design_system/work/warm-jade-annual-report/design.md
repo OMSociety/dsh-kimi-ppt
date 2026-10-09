@@ -1,4 +1,4 @@
-# Warm Jade Annual Report · Work Report STYLE DESIGN SYSTEM
+# Warm Jade Annual Report · Work STYLE DESIGN SYSTEM
 
 ## PART A — Category Baseline (Universal Minimum)
 

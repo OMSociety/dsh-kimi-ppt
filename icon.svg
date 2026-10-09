@@ -13,7 +13,7 @@
   <rect x="13.5" y="8" width="14" height="11" rx="2.5" fill="url(#kp1b_back)"/>
   <!-- 表层主幻灯片（Kimi 科技蓝） -->
   <rect x="8" y="13.5" width="17" height="13" rx="2.5" fill="url(#kp1b_front)"/>
-  <!-- 极简排版横条（两长一短，比例舒展） -->
+  <!-- 极简排版横条（一长一短，两道横条） -->
   <rect x="11.5" y="17" width="10" height="2" rx="1" fill="#FFFFFF"/>
   <rect x="11.5" y="21" width="6.5" height="2" rx="1" fill="#FFFFFF" fill-opacity="0.85"/>
 </svg>

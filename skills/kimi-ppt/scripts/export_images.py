@@ -45,6 +45,13 @@ OVERVIEW_THUMB_WIDTH = 640
 OVERVIEW_LABEL_HEIGHT = 32
 OVERVIEW_GAP = 12
 
+try:
+    import websocket as _websocket
+
+    _WS_ERRORS: Tuple[type, ...] = (_websocket.WebSocketException,)
+except ImportError:  # websocket-client is installed on demand by ensure_websocket()
+    _WS_ERRORS = ()
+
 
 def ensure_pillow() -> Tuple[Any, Any, Any]:
     try:
@@ -416,6 +423,13 @@ def main(argv: Optional[Sequence[str]] = None) -> int:
         manifest = find_manifest(args.input)
         output = args.output or manifest.parent / ".qa-images"
         summary = export_images(args.input, output, args.keep_browser_raw, args.force)
+    except _WS_ERRORS as exc:
+        print(
+            f"kimi-ppt image export failed: browser CDP connection error ({exc}); "
+            "check the debug browser and its remote debugging port",
+            file=sys.stderr,
+        )
+        return 1
     except (ExportError, OSError, subprocess.SubprocessError) as exc:
         print(f"kimi-ppt image export failed: {exc}", file=sys.stderr)
         return 1

@@ -1,5 +1,5 @@
 /**
- * Drop Python bytecode caches before packing.
+ * Drop Python bytecode caches and pytest caches before packing.
  *
  * `npm pack` / `npm publish` ship whatever sits in the working tree, and this
  * package declares a `files` whitelist — in that mode npm applies neither
@@ -10,6 +10,8 @@
  */
 import { readdirSync, rmSync } from 'node:fs'
 import { join } from 'node:path'
+
+const CACHE_DIRS = new Set(['__pycache__', '.pytest_cache'])
 
 function clean(dir) {
   let entries
@@ -22,7 +24,7 @@ function clean(dir) {
   for (const entry of entries) {
     if (!entry.isDirectory()) continue
     const path = join(dir, entry.name)
-    if (entry.name === '__pycache__') rmSync(path, { recursive: true, force: true })
+    if (CACHE_DIRS.has(entry.name)) rmSync(path, { recursive: true, force: true })
     else if (entry.name !== 'node_modules' && entry.name !== '.git') clean(path)
   }
 }

@@ -1,4 +1,4 @@
-# Black Gold Ledger · finance STYLE DESIGN SYSTEM
+# Black Gold Ledger · Finance STYLE DESIGN SYSTEM
 
 ## PART A — finance Baseline (Universal Floor)
 

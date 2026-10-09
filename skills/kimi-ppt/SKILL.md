@@ -53,7 +53,7 @@ deck/
 
 **桌面增强轨道（可选）**
 
-- 另需 Node.js 18+（含 npm）、Chrome 或 Edge、可连 `www.kimi.com`；`agent-browser` 由脚本经 npm 自动安装或升级（≥0.33.2），Windows 下脚本会另起一个调试用浏览器实例（端口 9337）。
+- 另需 Node.js 18+（含 npm）、Chrome 或 Edge，以及可连 `www.kimi.com` 与 `statics.moonshot.cn`（宿主页脚本 CDN，不可达时 deckStatus 报错）；`agent-browser` 由脚本经 npm 自动安装或升级（≥0.33.2），Windows 下脚本会另起一个调试用浏览器实例（端口 9337）。
 - 缺 `PyYAML` / `Pillow` / `websocket-client` 时脚本会自行 `pip install --user`。
 - 以上任一缺失就**直接退回本地轨道**，不硬等、不反复重试。
 
@@ -99,14 +99,23 @@ python scripts/check_fonts.py <deck.pptd>
 
    缺省输出 `<工程目录>/.preview`（`page_N.png` + `overview.jpg`，`-o` 可改路径），逐页核对：图片清晰不变形、文字未压住关键画面、元素未越界、文字与背景对比足够、对齐/间距/字号层级统一、无文字溢出与遮挡。可疑页读全分辨率图确认后再改，改完重跑预览直到全部通过。`.preview/` 是中间产物，交付后可删。
 
-   > 预览图只画 text / shape / line / image，**不渲染 table、icon、chart**：含表格的页要另开 `.pptx` 核对。需要官方渲染效果时再跑 `scripts/export_images.py`（桌面增强轨道）。
+   > 预览图渲染 text / shape / line / image（含 rotation），**不渲染 table、icon、chart**：含表格的页要另开 `.pptx` 核对。需要官方渲染效果时再跑 `scripts/export_images.py`（桌面增强轨道）。
 3. **模型不支持读图时**：退化为结构复核，并明确说明跳过了图像 QA。
 
 ### 六、导出与交付
 
 两条轨道：**本地轨道**（默认，纯本地/离线/沙箱可用）产出标准可编辑 `.pptx`；**桌面增强轨道**（需桌面环境 + 网络，依赖见「二、前置检查」）在此基础上附加**字体嵌入 + 淡入淡出转场**，这两项只有桌面增强轨道提供。
 
-本地轨道的元素支持是**真子集**：`icon`、`chart` 静默跳过，`image` 只插本地存在的文件（远程/缺失不插），未知 `shapeName` 退成矩形，`custom` 只画灰描边占位。deck 含这些元素时改用桌面增强轨道，或如实说明差异。两条命令在输出文件已存在时都须加 `--force`，否则直接报错退出。
+本地轨道的元素支持是**真子集**，未渲染或未映射的部分会向 stderr 打印 `dropped` 计数清单（末行 `dropped total: N`）：
+
+- **text / shape / line**：支持。line 的 `points` 取首末点映射到 bounds，中间控制点降级为直线（贝塞尔不实现）。
+- **image**：只插本地存在的文件；`fit` 三模式（`cover` 默认 / `contain` / `fill`）与 `crop` 正值按规范实现，`cropShape` 与 `crop` 负值（outset）降级。
+- **table**：结构、合并单元格与文本支持；主题样式做最小映射（`style` / `textStyle` 的首行强调、边框、纯色填充、zebra、字号/色/粗斜/字体族），其余样式字段降级。
+- **无 fill 的 shape** 按规范渲染为无填充；未知 `shapeName` 退成矩形；`custom` 只画灰描边占位（预览与导出一致）。
+- **icon / chart** 跳过；`notes`、`animations`、`opacity`、`flip` 本地轨道忽略；rotation 在导出轨道仅支持 shape（预览轨道支持 text / shape / line / image）。
+- deck 的 `pages` 为空时两条命令一致报错退出。
+
+deck 含降级项时改用桌面增强轨道，或如实说明差异。两条命令在输出文件已存在时都须加 `--force`，否则直接报错退出。
 
 1. **本地导出**：
 

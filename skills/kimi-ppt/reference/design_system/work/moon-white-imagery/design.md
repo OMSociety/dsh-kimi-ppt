@@ -1,4 +1,4 @@
-# Moon-White Imagery · WORK REPORT STYLE DESIGN SYSTEM
+# Moon-White Imagery · Work STYLE DESIGN SYSTEM
 
 ## PART A — Category Baseline (General Minimum)
 

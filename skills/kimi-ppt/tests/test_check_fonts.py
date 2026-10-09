@@ -7,6 +7,7 @@ deliberately not exercised here — it is covered indirectly by the CLI smoke
 test in the skill's manual validation, not by unit tests.
 """
 import importlib.util
+import sys
 import tempfile
 import unittest
 from io import StringIO
@@ -136,6 +137,80 @@ class MainArgvTests(unittest.TestCase):
             self.assertIn("MiSans", captured)
             self.assertIn("[已装]", captured)
 
+
+
+class WordBoundaryTests(unittest.TestCase):
+    def _fams(self, *names):
+        return {n.lower() for n in names}
+
+    def test_bare_prefix_without_boundary_is_not_a_match(self):
+        # "Literata" must not satisfy a request for "Liter" (the old loose
+        # prefix matcher reported this as installed).
+        self.assertFalse(MODULE.present(self._fams("literata"), "Liter"))
+
+    def test_weight_suffix_after_space_matches(self):
+        self.assertTrue(MODULE.present(self._fams("arial black"), "Arial"))
+
+    def test_variant_suffix_after_hyphen_matches(self):
+        self.assertTrue(MODULE.present(self._fams("arial-black"), "Arial"))
+
+    def test_exact_casefold_match(self):
+        self.assertTrue(MODULE.present(self._fams("literata"), "Literata"))
+
+
+class _FakeWinreg:
+    HKEY_LOCAL_MACHINE = "HKLM"
+    HKEY_CURRENT_USER = "HKCU"
+
+    def __init__(self, tables):
+        self.tables = tables
+
+    def OpenKey(self, root, _path):
+        if root in self.tables:
+            return root
+        raise OSError(2, "registry key not found")
+
+    def EnumValue(self, key, index):
+        entries = self.tables[key]
+        if index >= len(entries):
+            raise OSError(259, "no more data")
+        return (entries[index], "", 1)
+
+    def CloseKey(self, _key):
+        return None
+
+
+class RegistryMergeTests(unittest.TestCase):
+    def test_merges_hklm_and_hkcu(self):
+        fake = _FakeWinreg({
+            "HKLM": ["Arial (TrueType)"],
+            "HKCU": ["Noto Sans SC Bold"],
+        })
+        with patch.dict(sys.modules, {"winreg": fake}):
+            families = MODULE.installed_families()
+        self.assertIn("arial", families)
+        self.assertIn("noto sans sc bold", families)
+
+    def test_duplicate_entries_collapse(self):
+        fake = _FakeWinreg({
+            "HKLM": ["Arial (TrueType)"],
+            "HKCU": ["Arial (TrueType)"],
+        })
+        with patch.dict(sys.modules, {"winreg": fake}):
+            families = MODULE.installed_families()
+        self.assertEqual(families, {"arial"})
+
+    def test_missing_hkcu_still_returns_hklm(self):
+        fake = _FakeWinreg({"HKLM": ["Arial (TrueType)"]})
+        with patch.dict(sys.modules, {"winreg": fake}):
+            families = MODULE.installed_families()
+        self.assertEqual(families, {"arial"})
+
+    def test_missing_hklm_raises_for_posix_fallback(self):
+        fake = _FakeWinreg({"HKCU": ["Arial (TrueType)"]})
+        with patch.dict(sys.modules, {"winreg": fake}):
+            with self.assertRaises(OSError):
+                MODULE.installed_families()
 
 
 if __name__ == "__main__":
